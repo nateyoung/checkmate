@@ -1,0 +1,6 @@
+/* for selectmenus in report pages */
+label {
+  text-align  : center  ;
+  font-weight : bold    ;
+  white-space : nowrap  ;
+}
