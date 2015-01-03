@@ -1,0 +1,61 @@
+-get date ranges working
+-admin
+  -interface to edit student/user info
+  -create/assign/modify small groups
+  -create/modify small group leaders
+-fix selectmenu for gradyear - query db or calculate possible values
+-make stale users range configurable
+
+
+
+
+
+
+
+
+
+
+
+
+awstats
+/usr/local/awstats/wwwroot/cgi-bin/awstats.pl -update -config=io
+
+-Make event driven
+  -create events for discrete dates/times
+  -create repeating events
+    -table events
+      -id
+      -name
+    -table events_meta
+      -id
+      -start_date
+      -end_date
+      -repeat_interval_days
+      -start_time
+      -end_time
+    -http://stackoverflow.com/questions/5183630/calendar-recurring-repeating-events-best-storage-method/16659802#16659802
+      -SELECT EV.*
+       FROM `events` EV
+       RIGHT JOIN `events_meta` EM1 ON EM1.`event_id` = EV.`id`
+       WHERE  (( 1299736800 - repeat_start) % repeat_interval = 0 )
+
+      -get list of events happening at timestamp 
+        -SELECT EV.*
+         FROM events EV
+         RIGHT JOIN events_meta EM ON EM.eid = EV.eid
+         WHERE '2014-10-26 09:01:00'
+         BETWEEN EM.start_timestamp and EM.end_timestamp
+
+      -get list of recurring events happening on today
+        SELECT EV.*
+        FROM events EV
+        RIGHT JOIN events_meta EM ON EM.eid = EV.eid
+        WHERE (DATEDIFF('2014-11-02 09:01:00',EM.start_date) % repeat_interval_days = 0 )
+
+      THIS SHOULD WORK BUT DOESN'T
+      -get list of recurring events happening today and happening now
+        SELECT EV.*
+        FROM events EV
+        RIGHT JOIN events_meta EM ON EM.eid = EV.eid
+        WHERE (DATEDIFF('2014-11-02 09:01:00',EM.start_date) % repeat_interval_days = 0 ) AND 
+        (TIME('2014-11-02 09:35:00') BETWEEN start_time AND ADDTIME(start_time,duration_seconds))
