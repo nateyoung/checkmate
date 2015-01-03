@@ -12,6 +12,7 @@ $(document).on({
 
 var selected_user;
 var selected_uid;
+var smallgroup_ids = new Array();
       
 //********************************************************************************************************************************************
 // handle login form  
@@ -193,20 +194,20 @@ $(document).on("pagecreate", "#reports_page", function ()
   }).done(function( msg ) 
   {
     // console.log(msg);
-    var r = [];
-    r.push('<option value="%">All</option>'); // initial "all" option
+    smallgroup_ids.push('<option value="%" selected="selected">All</option>'); // initial "all" option
 
     // iterate through data, populate selectmenu's options
     $.each(msg, function (index, value) 
     {
-      r.push('<option value="'+value.sg_id+'">'+value.sg_name+'</option>');
+      smallgroup_ids.push('<option value="'+value.sg_id+'">'+value.sg_name+'</option>');
     });
 
     // populate w/ array r
-    $('#sgid').html(r.join(""));
+    $('#sgid_att').html(smallgroup_ids.join(""));
+    localStorage.setItem('smallgroup_ids', JSON.stringify(smallgroup_ids));
 
     // refresh selectmenu widget
-    $('#sgid').selectmenu('refresh', true);
+    // $('#sgid').selectmenu('refresh', true);
   });
 
 });
@@ -258,13 +259,13 @@ $(document).on("click", "#action_lv li" ,function (event)
   else
   {
     // show popup
-    // $.gritter.add(
-    // {
-    //   position: 'bottom-left',
-    //   title : 'Doh!',
-    //   time : 2000,
-    //   text : 'Not implemented yet, ' + selected_user
-    // });         
+    $.gritter.add(
+    {
+      position: 'bottom-left',
+      title : 'Doh!',
+      time : 2000,
+      text : 'Not implemented yet, ' + selected_user
+    });         
   }
 });
 
@@ -298,16 +299,16 @@ $(document).on("pagebeforeshow", "#user_history", function ()
 //********************************************************************************************************************************************
 // generate content for attendance page 
 //********************************************************************************************************************************************
-$(document).on("pagebeforeshow", "#attendance_page", function () 
+function update_attendance_table()
 {
   $.ajax(
   {
     url: "query.php",
     type: "POST",
     data: { query         : 0,
-            sgid          : $("#sgid").val(),
-            gender_rep    : $("#gender_rep").val(),
-            gradyear_rep  : $("#gradyear_rep").val(),
+            sgid          : $("#sgid_att").val(),
+            gender_rep    : $("#gender_att").val(),
+            gradyear_rep  : $("#gradyear_att").val(),
           },
     dataType: "json"
   }).done(function( msg ) 
@@ -325,30 +326,39 @@ $(document).on("pagebeforeshow", "#attendance_page", function ()
 
     // alert(r);
     $('#attendance_table')[0].innerHTML = r.join('');
-    // $('#dataTable').html(r.join(''));
   });
+}
 
-  $('#attendance_opt').html(  'Options:<br />'+
-                              'Date Range      - '+$("#daterange option:selected").text()+'<br />'+
-                              'Small Group ID  - '+$("#sgid option:selected").text()+'<br />'+
-                              'Gender          - '+$("#gender_rep option:selected").text()+'<br />'+
-                              'Grad Year       - '+$("#gradyear_rep option:selected").text());
+$(document).on("pagebeforeshow", "#attendance_page", function () 
+{
+  // hack to preserve dynamically loaded selectmenu values - async problems?
+  $('#sgid_att').html(JSON.parse(localStorage.getItem("smallgroup_ids")).join(""));
+
+  // update attendance table w/ values from options selectmenus
+  update_attendance_table();
 });
+
+// listen for option changes
+$(document).on('change', '#daterange_att' , function() { update_attendance_table(); });
+$(document).on('change', '#sgid_att'      , function() { update_attendance_table(); });
+$(document).on('change', '#gender_att'    , function() { update_attendance_table(); });
+$(document).on('change', '#gradyear_att'  , function() { update_attendance_table(); });
 
 
 //********************************************************************************************************************************************
 // generate content for stale users page 
 //********************************************************************************************************************************************
-$(document).on("pagebeforeshow", "#stale_users_page", function () 
+function update_stale_users_table()
 {
   $.ajax(
   {
     url: "query.php",
     type: "POST",
     data: { query         : 5,
-            sgid          : $("#sgid").val(),
-            gender_rep    : $("#gender_rep").val(),
-            gradyear_rep  : $("#gradyear_rep").val(),
+            daterange     : $("#daterange_stale").val(),
+            sgid          : $("#sgid_stale").val(),
+            gender_rep    : $("#gender_stale").val(),
+            gradyear_rep  : $("#gradyear_stale").val(),
           },
     dataType: "json"
   }).done(function( msg ) 
@@ -367,17 +377,25 @@ $(document).on("pagebeforeshow", "#stale_users_page", function ()
     $('#stale_users_table')[0].innerHTML = r.join('');
   });  
 
-  $('#stale_users_opt').html(  'Options:<br />'+
-                      'Date Range      - '+$("#daterange option:selected").text()+'<br />'+
-                      'Small Group ID  - '+$("#sgid option:selected").text()+'<br />'+
-                      'Gender          - '+$("#gender_rep option:selected").text()+'<br />'+
-                      'Grad Year       - '+$("#gradyear_rep option:selected").text());
+}
+
+$(document).on("pagebeforeshow", "#stale_users_page", function () 
+{
+  // hack to preserve dynamically loaded selectmenu values - async problems?
+  $('#sgid_stale').html(JSON.parse(localStorage.getItem("smallgroup_ids")).join(""));
+
+  update_stale_users_table();
 });
+
+$(document).on('change', '#daterange_stale' , function() { update_stale_users_table(); });
+$(document).on('change', '#sgid_stale'      , function() { update_stale_users_table(); });
+$(document).on('change', '#gender_stale'    , function() { update_stale_users_table(); });
+$(document).on('change', '#gradyear_stale'  , function() { update_stale_users_table(); });
 
 //********************************************************************************************************************************************
 // generate content for checkins page 
 //********************************************************************************************************************************************
-$(document).on("pagebeforeshow", "#checkins_page", function () 
+function update_checkins_table()
 {
   // get attendance per day and create collapsible
   $.ajax(
@@ -385,9 +403,9 @@ $(document).on("pagebeforeshow", "#checkins_page", function ()
     url: "query.php",
     type: "POST",
     data: { query         : 1,
-            sgid          : $("#sgid").val(),
-            gender_rep    : $("#gender_rep").val(),
-            gradyear_rep  : $("#gradyear_rep").val(),
+            sgid          : $("#sgid_ci").val(),
+            gender_rep    : $("#gender_ci").val(),
+            gradyear_rep  : $("#gradyear_ci").val(),
           },
     dataType: "json"
   }).done(function( msg ) 
@@ -421,28 +439,34 @@ $(document).on("pagebeforeshow", "#checkins_page", function ()
     $('#lv_attendance').html(r.join('')).listview("refresh");
     $('#lv_attendance').collapsibleset().trigger('create');
   });
+}
 
-  $('#checkins_opt').html(  'Options:<br />'+
-                      'Date Range      - '+$("#daterange option:selected").text()+'<br />'+
-                      'Small Group ID  - '+$("#sgid option:selected").text()+'<br />'+
-                      'Gender          - '+$("#gender_rep option:selected").text()+'<br />'+
-                      'Grad Year       - '+$("#gradyear_rep option:selected").text());
+$(document).on("pagebeforeshow", "#checkins_page", function () 
+{
+  // hack to preserve dynamically loaded selectmenu values - async problems?
+  $('#sgid_ci').html(JSON.parse(localStorage.getItem("smallgroup_ids")).join(""));
 
+  update_checkins_table();
 });
+
+$(document).on('change', '#daterange_ci' , function() { update_checkins_table(); });
+$(document).on('change', '#sgid_ci'      , function() { update_checkins_table(); });
+$(document).on('change', '#gender_ci'    , function() { update_checkins_table(); });
+$(document).on('change', '#gradyear_ci'  , function() { update_checkins_table(); });
 
 //********************************************************************************************************************************************
 // generate content for all user history page 
 //********************************************************************************************************************************************
-$(document).on("pagebeforeshow", "#all_user_history", function () 
+function update_user_history_table()
 {
   $.ajax(
   {
     url: "query.php",
     type: "POST",
     data: { query         : 6,
-            sgid          : $("#sgid").val(),
-            gender_rep    : $("#gender_rep").val(),
-            gradyear_rep  : $("#gradyear_rep").val(),
+            sgid          : $("#sgid_uh").val(),
+            gender_rep    : $("#gender_uh").val(),
+            gradyear_rep  : $("#gradyear_uh").val(),
           },
     dataType: "json"
   }).done(function( msg ) 
@@ -469,28 +493,34 @@ $(document).on("pagebeforeshow", "#all_user_history", function ()
     $('#all_user_attendance_lv').html(r.join('')).listview("refresh");
 
   });    
+}
 
-  $('#user_history_opt').html(  'Options:<br />'+
-                      'Date Range      - '+$("#daterange option:selected").text()+'<br />'+
-                      'Small Group ID  - '+$("#sgid option:selected").text()+'<br />'+
-                      'Gender          - '+$("#gender_rep option:selected").text()+'<br />'+
-                      'Grad Year       - '+$("#gradyear_rep option:selected").text());
+$(document).on("pagebeforeshow", "#all_user_history", function () 
+{
+  // hack to preserve dynamically loaded selectmenu values - async problems?
+  $('#sgid_uh').html(JSON.parse(localStorage.getItem("smallgroup_ids")).join(""));
 
+  update_user_history_table();
 });
+
+$(document).on('change', '#daterange_uh' , function() { update_user_history_table(); });
+$(document).on('change', '#sgid_uh'      , function() { update_user_history_table(); });
+$(document).on('change', '#gender_uh'    , function() { update_user_history_table(); });
+$(document).on('change', '#gradyear_uh'  , function() { update_user_history_table(); });
 
 //********************************************************************************************************************************************
 // generate content for user info page 
 //********************************************************************************************************************************************
-$(document).on("pagebeforeshow", "#user_info_page", function () 
+function update_user_info_table()
 {
   $.ajax(
   {
     url: "query.php",
     type: "POST",
     data: { query         : 9,
-            sgid          : $("#sgid").val(),
-            gender_rep    : $("#gender_rep").val(),
-            gradyear_rep  : $("#gradyear_rep").val(),
+            sgid          : $("#sgid_ui").val(),
+            gender_rep    : $("#gender_ui").val(),
+            gradyear_rep  : $("#gradyear_ui").val(),
           },
     dataType: "json"
   }).done(function( msg ) 
@@ -514,14 +544,20 @@ $(document).on("pagebeforeshow", "#user_info_page", function ()
 
     $('#user_info_table')[0].innerHTML = r.join('');
   });    
+}
 
-  $('#all_users_history_opt').html(  'Options:<br />'+
-                      'Date Range      - '+$("#daterange option:selected").text()+'<br />'+
-                      'Small Group ID  - '+$("#sgid option:selected").text()+'<br />'+
-                      'Gender          - '+$("#gender_rep option:selected").text()+'<br />'+
-                      'Grad Year       - '+$("#gradyear_rep option:selected").text());
+$(document).on("pagebeforeshow", "#user_info_page", function () 
+{
+  // hack to preserve dynamically loaded selectmenu values - async problems?
+  $('#sgid_ui').html(JSON.parse(localStorage.getItem("smallgroup_ids")).join(""));
 
+  update_user_info_table();
 });
+
+$(document).on('change', '#daterange_ui' , function() { update_user_info_table(); });
+$(document).on('change', '#sgid_ui'      , function() { update_user_info_table(); });
+$(document).on('change', '#gender_ui'    , function() { update_user_info_table(); });
+$(document).on('change', '#gradyear_ui'  , function() { update_user_info_table(); });
 
 //********************************************************************************************************************************************
 // handle login form  

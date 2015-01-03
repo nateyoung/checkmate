@@ -34,6 +34,7 @@ $addr_zip     = isset($_REQUEST['addr_zip'])      ? $_REQUEST['addr_zip']       
 $gradyear     = isset($_REQUEST['gradyear'])      ? get_gradeyear($_REQUEST['gradyear'])  : "0000";
 
 // report options
+$daterange    = isset($_REQUEST['daterange'])     ? $_REQUEST['daterange']                : "0";
 $sgid         = isset($_REQUEST['sgid'])          ? $_REQUEST['sgid']                     : "%";
 $gender_rep   = isset($_REQUEST['gender_rep'])    ? $_REQUEST['gender_rep']               : "%";
 $gradyear_rep = isset($_REQUEST['gradyear_rep'])  ? $_REQUEST['gradyear_rep']             : "%";
@@ -104,7 +105,7 @@ ON students.uid = attendance.uid
 WHERE students.small_group_id LIKE '$sgid' AND
       students.gender LIKE '$gender_rep' AND
       students.grad_year LIKE '$gradyear_rep' AND
-      attendance.date=(SELECT MAX(attendance.date) FROM attendance WHERE attendance.uid=students.uid) AND attendance.date<CURDATE()-INTERVAL 1 DAY",
+      attendance.date=(SELECT MAX(attendance.date) FROM attendance WHERE attendance.uid=students.uid) AND attendance.date<CURDATE()-INTERVAL $daterange",
 
 // 6 - show all students' checkin histories
 "SELECT DISTINCT DATE_FORMAT(DATE(attendance.date), '%Y-%c-%d (%a)') as days,
