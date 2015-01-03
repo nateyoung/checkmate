@@ -11,15 +11,13 @@
   <link rel="stylesheet" type="text/css" href="css/jquery.gritter.css" />
   <script src="js/jquery.gritter.js" type="text/javascript"> </script>
 
-   
-
   <style type="text/css">
         #chart_placeholder{width:100%;height:400px;}        
   </style>
 
   <style type="text/css">
     .ui-collision-home {
-      background: transparent url('img/collision.jpeg');
+      background: transparent url('images/collision.jpeg');
       background-size : 100% 100%;
       min-height: 100%;
       color:#FFFFFF;
