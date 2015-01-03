@@ -259,13 +259,13 @@ $(document).on("click", "#action_lv li" ,function (event)
   else
   {
     // show popup
-    $.gritter.add(
-    {
-      position: 'bottom-left',
-      title : 'Doh!',
-      time : 2000,
-      text : 'Not implemented yet, ' + selected_user
-    });         
+    // $.gritter.add(
+    // {
+    //   position: 'bottom-left',
+    //   title : 'Doh!',
+    //   time : 2000,
+    //   text : 'Not implemented yet, ' + selected_user
+    // });         
   }
 });
 
