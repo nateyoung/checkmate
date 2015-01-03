@@ -4,9 +4,12 @@
   <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css" />
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script src="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.js"></script>
-  <script src="js/jquery.gritter.js" type="text/javascript"> </script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/dygraph/1.1.0/dygraph-combined.js"></script>
   <script src="js/jquery_checkmate.js" type="text/javascript"> </script>
+
+  <!-- Gritter CSS & js -->
+  <link rel="stylesheet" type="text/css" href="css/jquery.gritter.css" />
+  <script src="js/jquery.gritter.js" type="text/javascript"> </script>
 
    
 
