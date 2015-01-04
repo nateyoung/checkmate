@@ -26,7 +26,7 @@ $(document).ready(function()
     $.ajax(
     {
       type: "POST",
-      url: "login.php",
+      url: "pages/login.php",
       cache: false,
       data: { username: $("#username").val(), 
               password: $("#password").val()
@@ -45,7 +45,7 @@ $(document).ready(function()
     $.ajax(
     {
       type: "POST",
-      url: "login.php",
+      url: "pages/login.php",
       cache: false,
       data: { username: "asdf", 
               password: "asdf"
@@ -64,7 +64,7 @@ $(document).ready(function()
 
     $.ajax(
     {
-      url: "query.php",
+      url: "pages/query.php",
       type: "POST",
       cache: false,
       data: { query       : 10,
@@ -111,7 +111,7 @@ $(document).on("pagebeforeshow", "#home", function ()
       // get student names that match
       $.ajax(
       {
-        url: "query.php",
+        url: "pages/query.php",
         type: "POST",
         data: {query: 8, pname: value},
         dataType: "json"
@@ -137,7 +137,7 @@ $(document).on("pagebeforeshow", "#reports_page", function ()
   // query DB for attendance data
   $.ajax(
   {
-    url: "query.php",
+    url: "pages/query.php",
     type: "POST",
     data: {query: 7},
     dataType: "json"
@@ -187,7 +187,7 @@ $(document).on("pagecreate", "#reports_page", function ()
   // get all smallgroup IDs from database and populate selectmenu
   $.ajax(
   {
-    url: "query.php",
+    url: "pages/query.php",
     type: "POST",
     data: {query: 11},
     dataType: "json"
@@ -242,7 +242,7 @@ $(document).on("click", "#action_lv li" ,function (event)
     // checkin user
     $.ajax(
     {
-      url: "query.php",
+      url: "pages/query.php",
       type: "POST",
       data: {uid: selected_uid, query: 2},
     });
@@ -277,7 +277,7 @@ $(document).on("pagebeforeshow", "#user_history", function ()
     // Show user's history
     $.ajax(
     {
-      url: "query.php",
+      url: "pages/query.php",
       type: "POST",
       data: {uid: selected_uid, query: 4},
     }).done(function( msg ) 
@@ -303,7 +303,7 @@ function update_attendance_table()
 {
   $.ajax(
   {
-    url: "query.php",
+    url: "pages/query.php",
     type: "POST",
     data: { query         : 0,
             sgid          : $("#sgid_att").val(),
@@ -352,7 +352,7 @@ function update_stale_users_table()
 {
   $.ajax(
   {
-    url: "query.php",
+    url: "pages/query.php",
     type: "POST",
     data: { query         : 5,
             daterange     : $("#daterange_stale").val(),
@@ -400,7 +400,7 @@ function update_checkins_table()
   // get attendance per day and create collapsible
   $.ajax(
   {
-    url: "query.php",
+    url: "pages/query.php",
     type: "POST",
     data: { query         : 1,
             sgid          : $("#sgid_ci").val(),
@@ -461,7 +461,7 @@ function update_user_history_table()
 {
   $.ajax(
   {
-    url: "query.php",
+    url: "pages/query.php",
     type: "POST",
     data: { query         : 6,
             sgid          : $("#sgid_uh").val(),
@@ -515,7 +515,7 @@ function update_user_info_table()
 {
   $.ajax(
   {
-    url: "query.php",
+    url: "pages/query.php",
     type: "POST",
     data: { query         : 9,
             sgid          : $("#sgid_ui").val(),
@@ -571,7 +571,7 @@ $(document).ready(function()
     $.ajax(
     {
         type: "POST",
-        url: "login.php",
+        url: "pages/login.php",
         cache: false,
         data: formData,
     });
