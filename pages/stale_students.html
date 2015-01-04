@@ -1,0 +1,52 @@
+<div data-role="page" id="stale_users_page">
+  <div data-role="header" data-add-back-btn="true" data-theme="b">
+    <a href="#home" class="ui-btn-right" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>
+    <h1>Inactive Students Report</h1>
+    <div data-role="navbar">
+      <ul>
+        <li>
+          <label for="daterange_stale">Inactive for</label>
+          <select name="daterange_stale" id="daterange_stale">
+            <option value="1 WEEK">1 Week</option>
+            <option value="1 MONTH">1 Month</option>
+            <option value="3 MONTH">3 Months</option>
+            <option value="6 MONTH">6 Months</option>
+            <option value="1 YEAR">1 Year</option>
+          </select>
+        </li>
+        <li>
+          <label for="sgid_stale">Small Group ID</label>
+          <select name="sgid_stale" id="sgid_stale">
+          </select>
+        </li>
+        <li>
+          <label for="gradyear_stale">Grade</label>
+          <select name="gradyear_stale" id="gradyear_stale">
+            <option value="%">All</option>
+            <option value="2021">6</option>
+            <option value="2020">7</option>
+            <option value="2019">8</option>
+            <option value="2018">9</option>
+            <option value="2017">10</option>
+            <option value="2016">11</option>
+            <option value="2015">12</option>
+          </select>
+        </li>
+        <li>
+          <label for="gender_stale">Gender</label>
+          <select name="gender_stale" id="gender_stale">
+            <option value="%">All</option>
+            <option value="m">Male</option>
+            <option value="f">Female</option>
+          </select>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div role="main" class="ui-content">
+    <table data-role="table" id="stale_users_table" data-mode="reflow" class="ui-responsive table-stroke">
+    </table>
+  </div>
+  <div role="footer">
+  </div>
+</div>

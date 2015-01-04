@@ -1,0 +1,53 @@
+<div data-role="page" id="checkins_page">
+  <div data-role="header" data-add-back-btn="true" data-theme="b">
+    <a href="#home" class="ui-btn-right" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>
+    <h1>Checkin Summary</h1>
+    <div data-role="navbar">
+      <ul>
+        <li>
+          <label for="daterange_ci">Date Range</label>
+          <select name="daterange_ci" id="daterange_ci">
+            <option value="1 WEEK">1 Week</option>
+            <option value="1 MONTH">1 Month</option>
+            <option value="3 MONTH">3 Months</option>
+            <option value="6 MONTH">6 Months</option>
+            <option value="1 YEAR">1 Year</option>
+          </select>
+        </li>
+        <li>
+          <label for="sgid_ci">Small Group ID</label>
+          <select name="sgid_ci" id="sgid_ci">
+          </select>
+        </li>
+        <li>
+          <label for="gradyear_ci">Grade</label>
+          <select name="gradyear_ci" id="gradyear_ci">
+            <option value="%">All</option>
+            <option value="2021">6</option>
+            <option value="2020">7</option>
+            <option value="2019">8</option>
+            <option value="2018">9</option>
+            <option value="2017">10</option>
+            <option value="2016">11</option>
+            <option value="2015">12</option>
+          </select>
+        </li>
+        <li>
+          <label for="gender_ci">Gender</label>
+          <select name="gender_ci" id="gender_ci">
+            <option value="%">All</option>
+            <option value="m">Male</option>
+            <option value="f">Female</option>
+          </select>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div role="main" class="ui-content">
+    <ul data-role="listview" id="lv_attendance">
+    </ul>
+  </div>
+  <div role="footer">
+  </div>
+</div>
+

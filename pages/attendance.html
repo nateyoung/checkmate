@@ -1,0 +1,50 @@
+<div data-role="page" id="attendance_page">
+  <div data-role="header" data-add-back-btn="true" data-theme="b">
+    <a href="#home" class="ui-btn-right" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>
+    <h1>Attendance Records - Summary</h1>
+    <div data-role="navbar">
+      <ul>
+        <li>
+          <label for="daterange_att">Date Range</label>
+          <select name="daterange_att" id="daterange_att">
+            <option value="%">All</option>
+            <option value="1 MONTH">Month</option>
+            <option value="3 MONTH">3 Months</option>
+            <option value="6 MONTH">6 Months</option>
+            <option value="1 YEAR">1 Year</option>
+          </select>
+        </li>
+        <li>
+          <label for="sgid_att">Small Group ID</label>
+          <select name="sgid_att" id="sgid_att">
+          </select>
+        </li>
+        <li>
+          <label for="gradyear_att">Grade</label>
+          <select name="gradyear_att" id="gradyear_att">
+            <option value="%">All</option>
+            <option value="2021">6</option>
+            <option value="2020">7</option>
+            <option value="2019">8</option>
+            <option value="2018">9</option>
+            <option value="2017">10</option>
+            <option value="2016">11</option>
+            <option value="2015">12</option>
+          </select>
+        </li>
+        <li>
+          <label for="gender_att">Gender</label>
+          <select name="gender_att" id="gender_att">
+            <option value="%">All</option>
+            <option value="m">Male</option>
+            <option value="f">Female</option>
+          </select>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div role="main" class="ui-content">
+    <table data-role="table" id="attendance_table" data-mode="reflow" class="ui-responsive table-stroke">
+    </table>
+  </div>
+</div>
