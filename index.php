@@ -13,17 +13,6 @@
 <script src="js/jquery.gritter.js" type="text/javascript"> </script>
 
 <style type="text/css">
-#chart_placeholder{width:100%;height:400px;}
-</style>
-
-<style type="text/css">
-  .ui-collision-home {
-  background: transparent url('images/collision.jpeg');
-  background-size : 100% 100%;
-  min-height: 100%;
-  color:#FFFFFF;
-  text-shadow:1px 1px 1px #000000;
-}
 </style>
 
 <?php
@@ -140,7 +129,7 @@
 <!-- ####### Reports page                                                 ##################################################################################### -->
 <!-- ########################################################################################################################################################## -->
 <div data-role="page" id="reports_page">
-  <div data-role="header" data-add-back-btn="true">
+  <div data-role="header" data-add-back-btn="true" data-theme="b">
     <a href="#left_menu2" class="ui-btn-left" data-icon="grid" data-iconpos="notext">Menu</a>
     <h1>Reports Page</h1>
   </div>
@@ -174,7 +163,7 @@
 <!-- ####### Attendance page                                              ##################################################################################### -->
 <!-- ########################################################################################################################################################## -->
 <div data-role="page" id="attendance_page">
-  <div data-role="header" data-add-back-btn="true">
+  <div data-role="header" data-add-back-btn="true" data-theme="b">
     <a href="#home" class="ui-btn-right" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>
     <h1>Attendance Records - Summary</h1>
     <div data-role="navbar">
@@ -228,7 +217,7 @@
 <!-- ####### Stale Users page                                             ##################################################################################### -->
 <!-- ########################################################################################################################################################## -->
 <div data-role="page" id="stale_users_page">
-  <div data-role="header" data-add-back-btn="true">
+  <div data-role="header" data-add-back-btn="true" data-theme="b">
     <a href="#home" class="ui-btn-right" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>
     <h1>Inactive Students Report</h1>
     <div data-role="navbar">
@@ -284,7 +273,7 @@
 <!-- ####### Checkins page                                                ##################################################################################### -->
 <!-- ########################################################################################################################################################## -->
 <div data-role="page" id="checkins_page">
-  <div data-role="header" data-add-back-btn="true">
+  <div data-role="header" data-add-back-btn="true" data-theme="b">
     <a href="#home" class="ui-btn-right" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>
     <h1>Checkin Summary</h1>
     <div data-role="navbar">
@@ -340,7 +329,7 @@
 <!-- ####### User History page                                            ##################################################################################### -->
 <!-- ########################################################################################################################################################## -->
 <div data-role="page" id="user_history">
-  <div data-role="header" data-add-back-btn="true">
+  <div data-role="header" data-add-back-btn="true" data-theme="b">
     <a href="#home" class="ui-btn-right" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>
     <h1>User History</h1>
     <div id="user_history_opt"></div>
@@ -357,7 +346,7 @@
 <!-- ####### All User History page                                        ##################################################################################### -->
 <!-- ########################################################################################################################################################## -->
 <div data-role="page" id="all_user_history">
-  <div data-role="header" data-add-back-btn="true">
+  <div data-role="header" data-add-back-btn="true" data-theme="b">
     <a href="#home" class="ui-btn-right" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>
     <h1>All Users' History</h1>
     <div data-role="navbar">
@@ -413,7 +402,7 @@
 <!-- ####### User Info page                                               ##################################################################################### -->
 <!-- ########################################################################################################################################################## -->
 <div data-role="page" id="user_info_page">
-  <div data-role="header" data-add-back-btn="true">
+  <div data-role="header" data-add-back-btn="true" data-theme="b">
     <a href="#home" class="ui-btn-right" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>
     <h1>User Info</h1>
     <div data-role="navbar">
@@ -469,7 +458,7 @@
 <!-- ####### Settings page                                                ##################################################################################### -->
 <!-- ########################################################################################################################################################## -->
 <div data-role="page" id="settings_page">
-  <div data-role="header" data-add-back-btn="true">
+  <div data-role="header" data-add-back-btn="true" data-theme="b">
     <a href="#left_menu3" class="ui-btn-left" data-icon="grid" data-iconpos="notext">Menu</a>
     <h1>Settings</h1>
   </div>
