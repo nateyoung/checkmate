@@ -43,7 +43,7 @@ $gradyear_rep = isset($_REQUEST['gradyear_rep'])  ? $_REQUEST['gradyear_rep']   
 
 if(isset($_REQUEST['query']))
 {
-  $queries = [
+  $queries = array(
 
 
 // 0 - get number of unique names per date
@@ -170,7 +170,7 @@ FROM  `small_groups`
 ORDER BY small_groups.sg_name",
 
 
-];
+);
   
   $result = $mysqli->query($queries[$_REQUEST['query']]) or die(mysql_error());
   
