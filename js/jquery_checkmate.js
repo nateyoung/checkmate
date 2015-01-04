@@ -156,7 +156,7 @@ $(document).on("pagebeforeshow", "#reports_page", function ()
 
     // generate chart after 500ms
     setTimeout( function (){
-      new Dygraph(document.getElementById("chart_placeholder"),
+      new Dygraph(document.getElementById("total_att_chart"),
         // For possible data formats, see http://dygraphs.com/data.html
         // The x-values could also be dates, e.g. "2012/03/15"
         r, // data from database
@@ -527,7 +527,7 @@ function update_user_info_table()
   {
     // console.log(msg);
     var r = new Array();
-    r.push( '<thead><tr><th>User</th><th>Email</th><th>Gender</th><th>Birthday</th><th>Grad Year</th><th>School Year</th><th>Phone</th><th>Small Group ID</th></tr></thead>')
+    r.push( '<thead><tr><th>User</th><th>Email</th><th>Gender</th><th>Birthday</th><th>Grad Year</th><th>School Year</th><th>Phone</th><th>Small Group</th></tr></thead>')
 
     $.each(msg, function (index, value) 
     {
@@ -538,7 +538,7 @@ function update_user_info_table()
                   '<td>' + value.grad_year + '</td>' +
                   '<td>' + value.school_year + '</td>' +
                   '<td>' + value.cellphone + '</td>' +
-                  '<td>' + value.small_group_id + '</td>' +
+                  '<td>' + value.sg_name + '</td>' +
               '</tr>' );
     });
 

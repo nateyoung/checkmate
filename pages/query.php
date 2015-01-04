@@ -143,7 +143,7 @@ ORDER BY firstname, lastname",
 
 // 9 - show user information
 "SELECT students.firstname, students.lastname, students.gender, students.birthday, students.grad_year,
-students.cellphone, students.email, students.small_group_id,
+students.cellphone, students.email, small_groups.sg_name,
   CASE
     WHEN students.grad_year = CURDATE() - INTERVAL 5 MONTH + INTERVAL 4 YEAR THEN 'Freshman'
     WHEN students.grad_year = CURDATE() - INTERVAL 5 MONTH + INTERVAL 3 YEAR THEN 'Sophomore'
@@ -151,7 +151,8 @@ students.cellphone, students.email, students.small_group_id,
     WHEN students.grad_year = CURDATE() - INTERVAL 5 MONTH + INTERVAL 1 YEAR THEN 'Senior'
     ELSE 'unknown'
   END AS school_year
-FROM students 
+FROM students JOIN small_groups
+ON (students.small_group_id = small_groups.sg_id)
 WHERE 
   students.small_group_id LIKE '$sgid' AND
   students.gender LIKE '$gender_rep' AND
