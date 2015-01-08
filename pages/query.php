@@ -138,7 +138,7 @@ GROUP BY DATE(attendance.date)",
 students.lastname as lastname,
 students.uid as uid
 FROM students 
-WHERE (INSTR(firstname, '{$pname}') > 0) OR (INSTR(lastname, '{$pname}') > 0)
+WHERE (firstname LIKE '$fn%') AND (lastname LIKE '$ln%')
 ORDER BY firstname, lastname",
 
 // 9 - show user information
@@ -168,6 +168,14 @@ VALUES ('$fn',       '$mn',        '$ln',      '$bday',    '$gradyear',  '$gende
 "SELECT  `sg_id` ,  `sg_name` ,  `sg_leader_uid` 
 FROM  `small_groups`
 ORDER BY small_groups.sg_name",
+
+// 12 - data for morris.js charts
+"SELECT DATE_FORMAT( DATE( attendance.date ) ,  '%Y-%c-%d' ) as date,
+COUNT(DISTINCT students.firstname, students.lastname) as attendees
+FROM students 
+JOIN attendance
+ON students.uid = attendance.uid
+GROUP BY DATE(attendance.date)",
 
 
 );

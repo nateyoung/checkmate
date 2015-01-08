@@ -93,7 +93,7 @@ $(document).ready(function()
 //********************************************************************************************************************************************
 // generate content for home page
 //********************************************************************************************************************************************
-$(document).on("pagebeforeshow", "#home", function () 
+$(document).on("pagecreate", "#home", function () 
 {
   // listen for typed characters, populate listview with usernames that match
   $( "#users_lv" ).on( "filterablebeforefilter", function ( e, data ) {
@@ -113,17 +113,17 @@ $(document).on("pagebeforeshow", "#home", function ()
       {
         url: "pages/query.php",
         type: "POST",
-        data: {query: 8, pname: value},
+        data: {query: 8, fn: value.split(' ',1)[0], ln: value.split(' ')[1]},
         dataType: "json"
       })
-      .done( function ( response ) {
+      .then( function ( response ) {
         $.each( response, function ( i, value ) {
-          html += '<li uname="' + value.firstname + ' ' + value.lastname  + '" uid="' + value.uid + '"><a href="#rightpanel">' + value.firstname + ' ' + value.lastname  + '</a></li>';
+          html += '<li data-filtertext=\"' + $("#filter-for-listview").val() + '\" uname="' + value.firstname + ' ' + value.lastname  + '" uid="' + value.uid + '"><a href="#rightpanel">' + value.firstname + ' ' + value.lastname  + '</a></li>';
         });
+        // console.log(html);
         $ul.html( html );
         $ul.listview( "refresh" );
         $ul.trigger( "updatelayout");
-        // console.log(html);
       });
     }
   });
