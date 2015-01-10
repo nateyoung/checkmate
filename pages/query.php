@@ -1,4 +1,10 @@
 <?php
+
+include('../log4php/Logger.php');
+Logger::configure('../logs/logconfig.xml');
+
+session_start();
+
 require "db_config.php";
 
 function get_gradyear($gradyear)
@@ -14,6 +20,11 @@ function get_gradyear($gradyear)
     case "12" : return "2015" ;
     default   : return ""     ;
   }
+}
+
+function clean_string($str)
+{
+  return trim(preg_replace('/\s\s+/', ' ', $str));
 }
 
 // validate form vars
@@ -191,16 +202,16 @@ if(isset($_REQUEST['query']))
     
 
   // before we do anything, log query
-  include('../log4php/Logger.php');
-  Logger::configure('logconfig.xml');
-  $log = Logger::getLogger('queryLogger');
-  $att_log = Logger::getLogger('attendanceLogger');
    
-  // Start logging
-  $log->info($queries[$_REQUEST['query']]);
+  // Log Query
+  // $log = $_SESSION['queryLogger'];
+  $log = Logger::getLogger('queryLogger');;
+  $log->info(getcwd().": ".clean_string($queries[$_REQUEST['query']]));
 
+  // Log attendance queries
+  $att_log = Logger::getLogger('attendanceLogger');;
   if( $_REQUEST['query']==2 or $_REQUEST['query']==10 )
-    $att_log->info($queries[$_REQUEST['query']]);
+    $att_log->info(getcwd().": ".clean_string($queries[$_REQUEST['query']]));
 
 
 

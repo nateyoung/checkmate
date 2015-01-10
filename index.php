@@ -1,3 +1,15 @@
+<?php
+  session_start();
+
+  // set up logger
+  // include('log4php/Logger.php');
+  // Logger::configure('logs/logconfig.xml');
+
+  // $_SESSION['queryLogger'] = Logger::getLogger('queryLogger');
+  // $_SESSION['attLogger']   = Logger::getLogger('attendanceLogger');
+
+?>
+
 <!DOCTYPE html>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,10 +25,6 @@
 <!-- Gritter CSS & js -->
 <link rel="stylesheet" type="text/css" href="css/jquery.gritter.css" />
 <script src="js/jquery.gritter.js" type="text/javascript"> </script>
-
-<?php
-  session_start();
-?>
 
 <body>
   <!-- ########################################################################################################################################################## -->

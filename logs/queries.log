@@ -1,0 +1,54 @@
+2015-01-10 13:48:03.342 - SELECT students.firstname as firstname,
+  students.lastname as lastname,
+  students.uid as uid
+  FROM students 
+  WHERE (firstname LIKE 'pat%') AND (lastname LIKE 'gil%')
+  ORDER BY firstname, lastname
+2015-01-10 13:48:23.027 - INSERT INTO attendance(uid) VALUES (488)
+2015-01-10 13:55:17.873 - SELECT students.firstname as firstname,
+  students.lastname as lastname,
+  students.uid as uid
+  FROM students 
+  WHERE (firstname LIKE 'pat%') AND (lastname LIKE 'gil%')
+  ORDER BY firstname, lastname
+2015-01-10 13:58:11.125 - SELECT students.firstname as firstname,
+  students.lastname as lastname,
+  students.uid as uid
+  FROM students 
+  WHERE (firstname LIKE 'pat%') AND (lastname LIKE 'gil%')
+  ORDER BY firstname, lastname
+2015-01-10 14:02:55.755 - SELECT students.firstname as firstname,
+  students.lastname as lastname,
+  students.uid as uid
+  FROM students 
+  WHERE (firstname LIKE 'pat%') AND (lastname LIKE 'gil%')
+  ORDER BY firstname, lastname
+2015-01-10 14:03:22.670 - SELECT students.firstname as firstname,
+  students.lastname as lastname,
+  students.uid as uid
+  FROM students 
+  WHERE (firstname LIKE 'pat%') AND (lastname LIKE 'gi%')
+  ORDER BY firstname, lastname
+2015-01-10 14:03:39.286 - INSERT INTO attendance(uid) VALUES (488)
+2015-01-10 14:37:36.813 - testing
+2015-01-10 15:05:07.482 - SELECT students.firstname as firstname,
+  students.lastname as lastname,
+  students.uid as uid
+  FROM students 
+  WHERE (firstname LIKE 'pat%') OR (lastname LIKE 'pat%')
+  ORDER BY firstname, lastname
+2015-01-10 15:05:27.218 - INSERT INTO attendance(uid) VALUES (488)
+2015-01-10 15:08:14.384 - /home/nate/jtest/checkmate/pages: SELECT students.firstname as firstname,
+  students.lastname as lastname,
+  students.uid as uid
+  FROM students 
+  WHERE (firstname LIKE 'pat%') OR (lastname LIKE 'pat%')
+  ORDER BY firstname, lastname
+2015-01-10 15:09:14.607 - /home/nate/jtest/checkmate/pages: SELECT students.firstname as firstname,
+  students.lastname as lastname,
+  students.uid as uid
+  FROM students 
+  WHERE (firstname LIKE 'pat%') OR (lastname LIKE 'pat%')
+  ORDER BY firstname, lastname
+2015-01-10 15:13:41.237 - /home/nate/jtest/checkmate/pages: SELECT students.firstname as firstname, students.lastname as lastname, students.uid as uid FROM students WHERE (firstname LIKE 'pat%') OR (lastname LIKE 'pat%') ORDER BY firstname, lastname
+2015-01-10 15:14:48.897 - /home/nate/jtest/checkmate/pages: SELECT students.firstname as firstname, students.lastname as lastname, students.uid as uid FROM students WHERE (firstname LIKE 'mel%') OR (lastname LIKE 'mel%') ORDER BY firstname, lastname

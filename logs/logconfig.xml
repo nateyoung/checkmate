@@ -1,0 +1,29 @@
+<configuration xmlns="http://logging.apache.org/log4php/">
+    <appender name="queryAppender" class="LoggerAppenderRollingFile">
+        <!-- <param name="file" value="../logs/queries.log" /> -->
+        <param name="file" value="/home/nate/jtest/checkmate/logs/queries.log" />
+        <layout class="LoggerLayoutPattern">
+            <param name="conversionPattern" value="%date{Y-m-d H:i:s.u} - %message%newline" />
+        </layout>
+        <param name="maxFileSize" value="10MB" />
+        <param name="maxBackupIndex" value="5" />
+    </appender>
+
+    <appender name="attendanceAppender" class="LoggerAppenderRollingFile">
+        <!-- <param name="file" value="../logs/attendance.log" /> -->
+        <param name="file" value="/home/nate/jtest/checkmate/logs/attendance.log" />
+        <layout class="LoggerLayoutPattern">
+            <param name="conversionPattern" value="%date{Y-m-d H:i:s.u} - %message%newline" />
+        </layout>
+        <param name="maxFileSize" value="10MB" />
+        <param name="maxBackupIndex" value="5" />
+    </appender>
+
+    <logger name="queryLogger">
+        <appender_ref ref="queryAppender" />
+    </logger>
+
+    <logger name="attendanceLogger">
+        <appender_ref ref="attendanceAppender" />
+    </logger>
+</configuration>
