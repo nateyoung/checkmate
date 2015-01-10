@@ -72,19 +72,32 @@ $(document).ready(function()
               mn          : $("#mn").val(),
               ln          : $("#ln").val(),
               bday        : $("#bday").val(),
-              gender      : $("#gender").val(),
-              cell        : $("#cell").val(),
+              gender      : $("#gender_select").val(),
+              cell        : $("#cphone").val(),
               homeph      : $("#homeph").val(),
               email       : $("#email").val(),
               addr_street : $("#addr_street").val(),
               addr_city   : $("#addr_city").val(),
               addr_state  : $("#addr_state").val(),
               addr_zip    : $("#addr_zip").val(),
-              gradyear    : $("#gradyear").val() 
+              gradyear    : $("#grade_select").val() 
               },
     }).done(function()
     {
-      $("#visitor_form").trigger("reset");
+      // show popup
+      $.gritter.add(
+      {
+        position: 'bottom-left',
+        title : 'Welcome!',
+        time : 2000,
+        text : 'Registered and checked in ' + $("#fn").val() + ' ' + $("#ln").val()
+      });
+
+      // reset form after gritter done (500ms)
+      setTimeout( function (){
+        $("#visitor_form").trigger("reset");
+      }, 500);
+
     });;
   });
 });
@@ -107,24 +120,49 @@ $(document).on("pagecreate", "#home", function ()
     if ( value && value.length >= 2 ) {
       $ul.html( "<li><div class='ui-loader'><span class='ui-icon ui-icon-loading'></span></div></li>" );
       $ul.listview( "refresh" );
+      var names=value.split(' ');
+      // console.log("len:"+names.length);
+      if(names.length>1) {
+        // get student names that match - first and last name entered
+        $.ajax(
+        {
+          url: "pages/query.php",
+          type: "POST",
+          data: {query: 13, fn: names[0], ln: names[1]},
+          dataType: "json"
+        })
+        .then( function ( response ) {
+          $.each( response, function ( i, value ) {
+            html += '<li data-filtertext=\"' + $("#filter-for-listview").val() + '\" uname="' + value.firstname + ' ' + value.lastname  + '" uid="' + value.uid + '"><a href="#rightpanel">' + value.firstname + ' ' + value.lastname  + '</a></li>';
+          });
 
-      // get student names that match
-      $.ajax(
-      {
-        url: "pages/query.php",
-        type: "POST",
-        data: {query: 8, fn: value.split(' ',1)[0], ln: value.split(' ')[1]},
-        dataType: "json"
-      })
-      .then( function ( response ) {
-        $.each( response, function ( i, value ) {
-          html += '<li data-filtertext=\"' + $("#filter-for-listview").val() + '\" uname="' + value.firstname + ' ' + value.lastname  + '" uid="' + value.uid + '"><a href="#rightpanel">' + value.firstname + ' ' + value.lastname  + '</a></li>';
+          // update ul
+          $ul.html( html );
+          $ul.listview( "refresh" );
+          $ul.trigger( "updatelayout");
         });
-        // console.log(html);
-        $ul.html( html );
-        $ul.listview( "refresh" );
-        $ul.trigger( "updatelayout");
-      });
+      }
+      else {
+        // get student names that match - only 1 name entered - don't know whether first or last, so check both
+        $.ajax(
+        {
+          url: "pages/query.php",
+          type: "POST",
+          data: {query: 8, fn: names[0], ln: names[0]},
+          dataType: "json"
+        })
+        .then( function ( response ) {
+          // console.log(response);
+          $.each( response, function ( i, value ) {
+            html += '<li data-filtertext=\"' + $("#filter-for-listview").val() + '\" uname="' + value.firstname + ' ' + value.lastname  + '" uid="' + value.uid + '"><a href="#rightpanel">' + value.firstname + ' ' + value.lastname  + '</a></li>';
+          });
+
+          // update ul
+          $ul.html( html );
+          $ul.listview( "refresh" );
+          $ul.trigger( "updatelayout");
+        });
+      }
     }
   });
 });
