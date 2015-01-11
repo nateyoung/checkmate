@@ -1,7 +1,7 @@
 <configuration xmlns="http://logging.apache.org/log4php/">
     <appender name="queryAppender" class="LoggerAppenderRollingFile">
         <!-- <param name="file" value="../logs/queries.log" /> -->
-        <param name="file" value="/home/nate/jtest/checkmate/logs/queries.log" />
+        <param name="file" value="/home/nate/jtest/checkmate/logs/raw_queries.log" />
         <layout class="LoggerLayoutPattern">
             <param name="conversionPattern" value="%date{Y-m-d H:i:s.u} - %message%newline" />
         </layout>
@@ -11,7 +11,17 @@
 
     <appender name="attendanceAppender" class="LoggerAppenderRollingFile">
         <!-- <param name="file" value="../logs/attendance.log" /> -->
-        <param name="file" value="/home/nate/jtest/checkmate/logs/attendance.log" />
+        <param name="file" value="/home/nate/jtest/checkmate/logs/att_queries.log" />
+        <layout class="LoggerLayoutPattern">
+            <param name="conversionPattern" value="%date{Y-m-d H:i:s.u} - %message%newline" />
+        </layout>
+        <param name="maxFileSize" value="10MB" />
+        <param name="maxBackupIndex" value="5" />
+    </appender>
+
+    <appender name="checkinAppender" class="LoggerAppenderRollingFile">
+        <!-- <param name="file" value="../logs/attendance.log" /> -->
+        <param name="file" value="/home/nate/jtest/checkmate/logs/checkins.log" />
         <layout class="LoggerLayoutPattern">
             <param name="conversionPattern" value="%date{Y-m-d H:i:s.u} - %message%newline" />
         </layout>
@@ -25,5 +35,9 @@
 
     <logger name="attendanceLogger">
         <appender_ref ref="attendanceAppender" />
+    </logger>
+
+    <logger name="checkinLogger">
+        <appender_ref ref="checkinAppender" />
     </logger>
 </configuration>

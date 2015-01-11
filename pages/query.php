@@ -54,6 +54,7 @@ $gradyear_rep = isset($_REQUEST['gradyear_rep'])  ? $_REQUEST['gradyear_rep']   
 
 if(isset($_REQUEST['query']))
 {
+  $query = $_REQUEST['query'];
   $queries = array(
 
 
@@ -92,7 +93,8 @@ if(isset($_REQUEST['query']))
   ORDER BY days,firstname,lastname",
   
   // 2 - check in a user
-  "INSERT INTO attendance(uid) VALUES ($uid)",
+  "INSERT INTO attendance(uid) VALUES ($uid);
+  SELECT firstname,lastname FROM students WHERE uid=$uid",
   
   // 3 - get list of students+uids
   "SELECT uid,firstname,lastname 
@@ -174,6 +176,7 @@ if(isset($_REQUEST['query']))
   "INSERT INTO `youth`.`students` 
          (`firstname`, `middlename`, `lastname`, `birthday`, `grad_year`,  `gender`, `cellphone`,  `homephone`,  `email`,  `addr_street`,  `addr_city`, `addr_state`, `addr_zip`) 
   VALUES ('$fn',       '$mn',        '$ln',      '$bday',    '$gradyear',  '$gender','$cell',      '$homeph',    '$email', '$addr_street', '$addr_city','$addr_state','$addr_zip');
+  SELECT firstname,lastname FROM students WHERE uid=LAST_INSERT_ID();
   INSERT INTO attendance(uid) VALUES (LAST_INSERT_ID())",
   
   // 11 - get smallgroup IDs
@@ -206,18 +209,16 @@ if(isset($_REQUEST['query']))
   // Log Query
   // $log = $_SESSION['queryLogger'];
   $log = Logger::getLogger('queryLogger');;
-  $log->info(getcwd().": ".clean_string($queries[$_REQUEST['query']]));
+  $log->info(getcwd().": query:".$query." : ".clean_string($queries[$query]));
 
   // Log attendance queries
   $att_log = Logger::getLogger('attendanceLogger');;
-  if( $_REQUEST['query']==2 or $_REQUEST['query']==10 )
-    $att_log->info(getcwd().": ".clean_string($queries[$_REQUEST['query']]));
-
-
+  if( $query==2 or $query==10 )
+    $att_log->info(getcwd().": query:".$query." : ".clean_string($queries[$query]));
 
   // do db query and return json result
   $rows = [];
-  if ($mysqli->multi_query($queries[$_REQUEST['query']])) {
+  if ($mysqli->multi_query($queries[$query])) {
     do {
       /* store first result set */
       if ($result = $mysqli->store_result()) {
@@ -231,6 +232,13 @@ if(isset($_REQUEST['query']))
       }
     } while ($mysqli->next_result());
   }
+
+  // log checkin
+  $ch_log = Logger::getLogger('checkinLogger');;
+  if( $query==2 )
+    $ch_log->info(getcwd().": Checked in ".implode(' ',$rows[0]).".");
+  else if( $query==10 )
+    $ch_log->info(getcwd().": New user ".implode(' ',$rows[0])." created and checked in.");
 
   /* close connection */
   $mysqli->close();
