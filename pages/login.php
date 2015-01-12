@@ -1,5 +1,7 @@
 <?php
 require "db_config.php";
+include('../log4php/Logger.php');
+Logger::configure('../logs/logconfig.xml');
 
 $username=$_POST['username']; 
 $password=$_POST['password']; 
@@ -16,6 +18,11 @@ WHERE users.username=\"$username\" AND users.password=\"$password\"";
     session_start();
     $_SESSION["user"] = $username;
     $_SESSION["admin"] = $row['admin'];
+
+    // log user login
+    $log = Logger::getLogger('loginLogger');;
+    $log->info(getcwd().": ".$username." logged in from ".$_SERVER['REMOTE_ADDR']);
+
   }
   else
   {

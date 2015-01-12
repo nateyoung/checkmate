@@ -29,6 +29,16 @@
         <param name="maxBackupIndex" value="5" />
     </appender>
 
+    <appender name="loginAppender" class="LoggerAppenderRollingFile">
+        <!-- <param name="file" value="../logs/attendance.log" /> -->
+        <param name="file" value="/home/nate/jtest/checkmate/logs/logins.log" />
+        <layout class="LoggerLayoutPattern">
+            <param name="conversionPattern" value="%date{Y-m-d H:i:s.u} - %message%newline" />
+        </layout>
+        <param name="maxFileSize" value="10MB" />
+        <param name="maxBackupIndex" value="5" />
+    </appender>
+
     <logger name="queryLogger">
         <appender_ref ref="queryAppender" />
     </logger>
@@ -39,5 +49,9 @@
 
     <logger name="checkinLogger">
         <appender_ref ref="checkinAppender" />
+    </logger>
+
+    <logger name="loginLogger">
+        <appender_ref ref="loginAppender" />
     </logger>
 </configuration>
