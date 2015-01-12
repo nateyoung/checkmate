@@ -63,7 +63,7 @@ if(isset($_REQUEST['query']))
   FROM students
   JOIN attendance ON students.uid = attendance.uid
   WHERE 
-    students.small_group_id LIKE '$sgid' AND
+    (students.small_group_id LIKE '$sgid' OR students.small_group_id IS NULL) AND
     students.gender LIKE '$gender_rep' AND
     students.grad_year LIKE '$gradyear_rep'
   GROUP BY DATE( attendance.date )",
@@ -81,13 +81,13 @@ if(isset($_REQUEST['query']))
       FROM students JOIN attendance
       ON students.uid = attendance.uid
       WHERE 
-        students.small_group_id LIKE '$sgid' AND
+        (students.small_group_id LIKE '$sgid' OR students.small_group_id IS NULL) AND
         students.gender LIKE '$gender_rep' AND
         students.grad_year LIKE '$gradyear_rep'
       GROUP BY DATE(attendance.date)
   ) subtotals ON subtotals.dates = DATE(attendance.date)
   WHERE 
-    students.small_group_id LIKE '$sgid' AND
+    (students.small_group_id LIKE '$sgid' OR students.small_group_id IS NULL) AND
     students.gender LIKE '$gender_rep' AND
     students.grad_year LIKE '$gradyear_rep'
   ORDER BY days,firstname,lastname",
