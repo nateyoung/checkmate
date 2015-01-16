@@ -1,3 +1,4 @@
 # ignore DB credentials file
 db_config.php
 logs/*.log
+pages/test*
