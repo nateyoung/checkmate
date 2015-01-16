@@ -173,7 +173,7 @@ if(isset($_REQUEST['query']))
   ORDER BY students.firstname, students.lastname",
   
   // 10 - register visitor and check them in
-  "INSERT INTO `youth`.`students` 
+  "INSERT INTO `students` 
          (`firstname`, `middlename`, `lastname`, `birthday`, `grad_year`,  `gender`, `cellphone`,  `homephone`,  `email`,  `addr_street`,  `addr_city`, `addr_state`, `addr_zip`) 
   VALUES ('$fn',       '$mn',        '$ln',      '$bday',    '$gradyear',  '$gender','$cell',      '$homeph',    '$email', '$addr_street', '$addr_city','$addr_state','$addr_zip');
   SELECT firstname,lastname FROM students WHERE uid=LAST_INSERT_ID();
