@@ -20,13 +20,7 @@
  */
        
 require_once("EditableGrid.php");
-
-$config = array(
-  "db_name" => "youth",
-  "db_user" => "root",
-  "db_password" => "ohf83838",
-  "db_host" => "localhost"
-);                
+require_once("../../../pages/db_config.php");
 
 /**
  * fetch_pairs is a simple method that transforms a mysqli_result object in an array.
@@ -47,11 +41,10 @@ function fetch_pairs($mysqli,$query){
   return $rows;
 }
 
-
 // Database connection
 $mysqli = mysqli_init();
 $mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT, 5);
-$mysqli->real_connect($config['db_host'],$config['db_user'],$config['db_password'],$config['db_name']); 
+$mysqli->real_connect($hostname,$username,$password,$databasename); 
                     
 // create a new EditableGrid object
 $grid = new EditableGrid();

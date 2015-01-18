@@ -11,17 +11,12 @@
  * http://editablegrid.net/license
  */
       
-$config = array(
-  "db_name" => "youth",
-  "db_user" => "root",
-  "db_password" => "ohf83838",
-  "db_host" => "localhost"
-);                
+require_once("../../../pages/db_config.php");
 
 // Database connection                                   
 $mysqli = mysqli_init();
 $mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT, 5);
-$mysqli->real_connect($config['db_host'],$config['db_user'],$config['db_password'],$config['db_name']); 
+$mysqli->real_connect($hostname,$username,$password,$databasename); 
                       
 // Get all parameters provided by the javascript
 $colname = $mysqli->real_escape_string(strip_tags($_POST['colname']));
