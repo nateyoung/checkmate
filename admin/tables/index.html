@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Backend</title>
+		
+		<script src="js/editablegrid.js"></script>
+		<script src="js/editablegrid_renderers.js" ></script>
+		<script src="js/editablegrid_editors.js" ></script>
+		<script src="js/editablegrid_validators.js" ></script>
+		<script src="js/editablegrid_utils.js" ></script>
+		<link rel="stylesheet" href="css/editablegrid.css" type="text/css" media="screen">
+		<script src="js/jquery-1.7.2.min.js" ></script>
+
+		<style>
+			body { font-family:'lucida grande', tahoma, verdana, arial, sans-serif; font-size:11px; }
+			h1 { font-size: 15px; }
+			a { color: #548dc4; text-decoration: none; }
+			a:hover { text-decoration: underline; }
+			table.testgrid { border-collapse: collapse; border: 1px solid #CCB; width: 800px; }
+			table.testgrid td, table.testgrid th { padding: 5px; border: 1px solid #E0E0E0; }
+			table.testgrid th { background: #E5E5E5; text-align: left; }
+			input.invalid { background: red; color: #FDFDFD; }
+		</style>
+		
+		<script>
+			function highlightRow(rowId, bgColor, after)
+			{
+				var rowSelector = $("#" + rowId);
+				rowSelector.css("background-color", bgColor);
+				rowSelector.fadeTo("normal", 0.5, function() { 
+					rowSelector.fadeTo("fast", 1, function() { 
+						rowSelector.css("background-color", '');
+					});
+				});
+			}
+
+			function highlight(div_id, style) {
+				highlightRow(div_id, style == "error" ? "#e5afaf" : style == "warning" ? "#ffcc00" : "#8dc70a");
+			}
+
+			function updateCellValue(editableGrid, rowIndex, columnIndex, oldValue, newValue, row, onResponse)
+			{      
+				$.ajax({
+					url: 'pages/update.php',
+					type: 'POST',
+					dataType: "html",
+					data: {
+						tablename : editableGrid.name,
+						id: editableGrid.getRowValues(rowIndex).uid, 
+						newvalue: editableGrid.getColumnType(columnIndex) == "boolean" ? (newValue ? 1 : 0) : newValue, 
+						colname: editableGrid.getColumnName(columnIndex),
+						coltype: editableGrid.getColumnType(columnIndex)			
+					},
+					success: function (response) 
+					{ 
+						// reset old value if failed then highlight row
+						var success = onResponse ? onResponse(response) : (response == "ok" || !isNaN(parseInt(response))); // by default, a sucessfull reponse can be "ok" or a database id 
+						if (!success) editableGrid.setValueAt(rowIndex, columnIndex, oldValue);
+					  highlight(row.id, success ? "ok" : "error"); 
+					},
+					error: function(XMLHttpRequest, textStatus, exception) { alert("Ajax failure\n" + errortext); },
+					async: true
+				});
+			   
+			}
+
+			window.onload = function() {
+				editableGrid = new EditableGrid("students"); 
+				editableGrid.tableLoaded  = function() { this.renderGrid("tablecontent", "testgrid"); };
+				editableGrid.modelChanged = function(rowIndex, columnIndex, oldValue, newValue, row) {
+   	    	updateCellValue(this, rowIndex, columnIndex, oldValue, newValue, row);
+   	    };
+
+				editableGrid.loadJSON("pages/getdata.php");
+			}
+		</script>
+		
+	</head>
+	
+	<body>
+		<h1>Backend</h1> 
+		<div id="tablecontent"></div>
+	</body>
+
+</html>
