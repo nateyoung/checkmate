@@ -22,10 +22,20 @@
 require_once("EditableGrid.php");
 require_once("../../../pages/db_config.php");
 
-/**
- * fetch_pairs is a simple method that transforms a mysqli_result object in an array.
- * It will be used to generate possible values for some columns.
-*/
+// Database connection
+$mysqli = mysqli_init();
+$mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT, 5);
+$mysqli->real_connect($hostname,$username,$password,$databasename); 
+                    
+// create a new EditableGrid object
+$grid = new EditableGrid();
+
+function get_sgids() {
+  $rows = array();
+
+  return $rows;
+}
+
 function fetch_pairs($mysqli,$query){
   if (!($res = $mysqli->query($query)))return FALSE;
   $rows = array();
@@ -41,13 +51,6 @@ function fetch_pairs($mysqli,$query){
   return $rows;
 }
 
-// Database connection
-$mysqli = mysqli_init();
-$mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT, 5);
-$mysqli->real_connect($hostname,$username,$password,$databasename); 
-                    
-// create a new EditableGrid object
-$grid = new EditableGrid();
 
 /* 
 *  Add columns. The first argument of addColumn is the name of the field in the databse. 
@@ -64,7 +67,7 @@ $grid->addColumn('gender', 'Gender', 'string');
 $grid->addColumn('cellphone', 'Cellphone', 'string');  
 $grid->addColumn('homephone', 'Homephone', 'string');  
 $grid->addColumn('email', 'Email', 'email');  
-$grid->addColumn('small_group_id', 'Small Group ID', 'string');  // TODO - populate w/ SGIDs
+$grid->addColumn('small_group_id', 'Small Group ID', 'string',fetch_pairs($mysqli,'SELECT sg_id, sg_name FROM small_groups ORDER BY sg_id'));  // TODO - populate w/ SGIDs
 $grid->addColumn('addr_street', 'Street Addr', 'string');  
 $grid->addColumn('addr_city', 'City', 'string');  
 $grid->addColumn('addr_state', 'State', 'string');   
