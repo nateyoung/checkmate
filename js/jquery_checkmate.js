@@ -59,6 +59,8 @@ $(document).ready(function()
   // handle visitor registration form
   $("#visitor_form").submit(function(e) {
     e.preventDefault();
+    e.stopImmediatePropagation(); // stop double-submitted forms
+    
     var form = this;
     $("#popupLogin").popup("close");
 
