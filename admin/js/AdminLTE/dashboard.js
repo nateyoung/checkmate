@@ -151,7 +151,7 @@ $(function() {
         // r.push( {x: '2012-03-26', item1: 4912, item2: 1969});
 
     
-      console.log(r);
+      // console.log(r);
     
       // generate chart after 500ms
       setTimeout( function (){
