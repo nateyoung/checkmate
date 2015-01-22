@@ -1,3 +1,5 @@
+'use strict';
+
 //********************************************************************************************************************************************
 // show spinner when AJAX queries are pending
 //********************************************************************************************************************************************
@@ -10,26 +12,35 @@ $(document).on({
   }    
 });
 
-var selected_user;
-var selected_uid;
-var smallgroup_ids = new Array();
+// var $loading = $('#loadingDiv').hide();
+// $(document)
+//   .ajaxStart(function () {
+//     $loading.show();
+//   })
+//   .ajaxStop(function () {
+//     $loading.hide();
+//   });
+
+var selectedUser;
+var selectedUid;
+var smallgroupIDs = [];
       
 //********************************************************************************************************************************************
 // handle login form  
 //********************************************************************************************************************************************
 $(document).ready(function() 
 {
-  $("#login_form").submit(function(e) {
+  $('#login_form').submit(function(e) {
     e.preventDefault();
     var form = this;
 
     $.ajax(
     {
-      type: "POST",
-      url: "pages/login.php",
+      type: 'POST',
+      url: 'pages/login.php',
       cache: false,
-      data: { username: $("#username").val(), 
-              password: $("#password").val()
+      data: { username: $('#username').val(), 
+              password: $('#password').val()
             }
     }).done(function()
     {
@@ -38,17 +49,17 @@ $(document).ready(function()
   });
 
   // handle logout form
-  $("#logout_form").submit(function(e) {
+  $('#logout_form').submit(function(e) {
     e.preventDefault();
     var form = this;
 
     $.ajax(
     {
-      type: "POST",
-      url: "pages/login.php",
+      type: 'POST',
+      url: 'pages/login.php',
       cache: false,
-      data: { username: "asdf", 
-              password: "asdf"
+      data: { username: 'asdf', 
+              password: 'asdf'
             }
     }).done(function()
     {
@@ -57,32 +68,31 @@ $(document).ready(function()
   });
 
   // handle visitor registration form
-  $("#visitor_form").submit(function(e) {
+  $('#visitor_form').submit(function(e) {
     e.preventDefault();
     e.stopImmediatePropagation(); // stop double-submitted forms
     
-    var form = this;
-    $("#popupLogin").popup("close");
+    $('#popupLogin').popup('close');
 
     $.ajax(
     {
-      url: "pages/query.php",
-      type: "POST",
+      url: 'pages/query.php',
+      type: 'POST',
       cache: false,
       data: { query       : 10,
-              fn          : $("#fn").val(),
-              mn          : $("#mn").val(),
-              ln          : $("#ln").val(),
-              bday        : $("#bday").val(),
-              gender      : $("#gender_select").val(),
-              cell        : $("#cphone").val(),
-              homeph      : $("#homeph").val(),
-              email       : $("#email").val(),
-              addr_street : $("#addr_street").val(),
-              addr_city   : $("#addr_city").val(),
-              addr_state  : $("#addr_state").val(),
-              addr_zip    : $("#addr_zip").val(),
-              gradyear    : $("#grade_select").val() 
+              fn          : $('#fn').val(),
+              mn          : $('#mn').val(),
+              ln          : $('#ln').val(),
+              bday        : $('#bday').val(),
+              gender      : $('#gender_select').val(),
+              cell        : $('#cphone').val(),
+              homeph      : $('#homeph').val(),
+              email       : $('#email').val(),
+              addrStreet  : $('#addrStreet').val(),
+              addrCity    : $('#addrCity').val(),
+              addrState   : $('#addrState').val(),
+              addrZip     : $('#addrZip').val(),
+              gradyear    : $('#gradeSelect').val() 
               },
     }).done(function()
     {
@@ -92,15 +102,15 @@ $(document).ready(function()
         position: 'bottom-left',
         title : 'Welcome!',
         time : 2000,
-        text : 'Registered and checked in ' + $("#fn").val() + ' ' + $("#ln").val()
+        text : 'Registered and checked in ' + $('#fn').val() + ' ' + $('#ln').val()
       });
 
       // reset form after gritter done (500ms)
       setTimeout( function (){
-        $("#visitor_form").trigger("reset");
+        $('#visitor_form').trigger('reset');
       }, 500);
 
-    });;
+    });
   });
 });
 
@@ -108,61 +118,61 @@ $(document).ready(function()
 //********************************************************************************************************************************************
 // generate content for home page
 //********************************************************************************************************************************************
-$(document).on("pagecreate", "#home", function () 
+$(document).on('pagecreate', '#home', function () 
 {
   // listen for typed characters, populate listview with usernames that match
-  $( "#users_lv" ).on( "filterablebeforefilter", function ( e, data ) {
+  $( '#users_lv' ).on( 'filterablebeforefilter', function ( e, data ) {
     var $ul = $( this ),
     $input = $( data.input ),
     value = $input.val(),
-    html = "";
-    $ul.html( "" );
+    html = '';
+    $ul.html( '' );
 
     // wait until at least 2 chars are typed before querying DB
     if ( value && value.length >= 2 ) {
-      $ul.html( "<li><div class='ui-loader'><span class='ui-icon ui-icon-loading'></span></div></li>" );
-      $ul.listview( "refresh" );
+      $ul.html( '<li><div class="ui-loader"><span class="ui-icon ui-icon-loading"></span></div></li>' );
+      $ul.listview( 'refresh' );
       var names=value.split(' ');
       // console.log("len:"+names.length);
       if(names.length>1) {
         // get student names that match - first and last name entered
         $.ajax(
         {
-          url: "pages/query.php",
-          type: "POST",
+          url: 'pages/query.php',
+          type: 'POST',
           data: {query: 13, fn: names[0], ln: names[1]},
-          dataType: "json"
+          dataType: 'json'
         })
         .then( function ( response ) {
           $.each( response, function ( i, value ) {
-            html += '<li data-filtertext=\"' + $("#filter-for-listview").val() + '\" uname="' + value.firstname + ' ' + value.lastname  + '" uid="' + value.uid + '"><a href="#rightpanel">' + value.firstname + ' ' + value.lastname  + '</a></li>';
+            html += '<li data-filtertext="' + $('#filter-for-listview').val() + '" uname="' + value.firstname + ' ' + value.lastname  + '" uid="' + value.uid + '"><a href="#rightpanel">' + value.firstname + ' ' + value.lastname  + '</a></li>';
           });
 
           // update ul
           $ul.html( html );
-          $ul.listview( "refresh" );
-          $ul.trigger( "updatelayout");
+          $ul.listview( 'refresh' );
+          $ul.trigger( 'updatelayout');
         });
       }
       else {
         // get student names that match - only 1 name entered - don't know whether first or last, so check both
         $.ajax(
         {
-          url: "pages/query.php",
-          type: "POST",
+          url: 'pages/query.php',
+          type: 'POST',
           data: {query: 8, fn: names[0], ln: names[0]},
-          dataType: "json"
+          dataType: 'json'
         })
         .then( function ( response ) {
           // console.log(response);
           $.each( response, function ( i, value ) {
-            html += '<li data-filtertext=\"' + $("#filter-for-listview").val() + '\" uname="' + value.firstname + ' ' + value.lastname  + '" uid="' + value.uid + '"><a href="#rightpanel">' + value.firstname + ' ' + value.lastname  + '</a></li>';
+            html += '<li data-filtertext="' + $('#filter-for-listview').val() + '" uname="' + value.firstname + ' ' + value.lastname  + '" uid="' + value.uid + '"><a href="#rightpanel">' + value.firstname + ' ' + value.lastname  + '</a></li>';
           });
 
           // update ul
           $ul.html( html );
-          $ul.listview( "refresh" );
-          $ul.trigger( "updatelayout");
+          $ul.listview( 'refresh' );
+          $ul.trigger( 'updatelayout');
         });
       }
     }
@@ -172,49 +182,70 @@ $(document).on("pagecreate", "#home", function ()
 //********************************************************************************************************************************************
 // generate content for reports page 
 //********************************************************************************************************************************************
-$(document).on("pagebeforeshow", "#reports_page", function () 
+$(document).on('pagebeforeshow', '#reports_page', function () 
 {
   // query DB for attendance data
   $.ajax(
   {
-    url: "pages/query.php",
-    type: "POST",
+    url: 'pages/query.php',
+    type: 'POST',
     data: {query: 7},
-    dataType: "json"
+    dataType: 'json'
   }).done(function( msg ) 
   {
     // console.log(msg);
 
     // parse through returned data, populate array of dates+attendance
-    var r = new Array();
+    var r = [];
     $.each(msg, function (index, value) 
     {
-      r.push( [new Date(value.date),value.attendees]);
+      // r.push( [new Date(value.date),value.attendees]);
+      r.push( {day:value.date, value:value.attendees});
     });
 
     // console.log(r);
 
+    // clear chart so multiples aren't created
+    $('#total_att_chart').empty();
+
     // generate chart after 500ms
     setTimeout( function (){
-      new Dygraph(document.getElementById("total_att_chart"),
-        // For possible data formats, see http://dygraphs.com/data.html
-        // The x-values could also be dates, e.g. "2012/03/15"
-        r, // data from database
-        {
-          // options go here. See http://dygraphs.com/options.html
-          // legend: 'always',
-          animatedZooms: true,
-          xlabel: 'Date',
-          ylabel: 'Attendance',
-          labels: ["date","attendance"],
-          title: 'Attendance over time',
-          fillGraph: true,
-          rightGap: 20,
-          drawPoints: true,
-          pointSize : 3,
-          highlightCircleSize: 5,
-          // showRangeSelector: true,
-        });
+      // new Dygraph(document.getElementById("total_att_chart"),
+      //   // For possible data formats, see http://dygraphs.com/data.html
+      //   // The x-values could also be dates, e.g. "2012/03/15"
+      //   r, // data from database
+      //   {
+      //     // options go here. See http://dygraphs.com/options.html
+      //     // legend: 'always',
+      //     animatedZooms: true,
+      //     xlabel: 'Date',
+      //     ylabel: 'Attendance',
+      //     labels: ["date","attendance"],
+      //     title: 'Attendance over time',
+      //     fillGraph: true,
+      //     rightGap: 20,
+      //     drawPoints: true,
+      //     pointSize : 3,
+      //     highlightCircleSize: 5,
+      //     // showRangeSelector: true,
+      //   });
+
+      new Morris.Area({
+        // ID of the element in which to draw the chart.
+        element: 'total_att_chart',
+        // Chart data records -- each entry in this array corresponds to a point on
+        // the chart.
+        data: r,
+        // The name of the data record attribute that contains x-values.
+        xkey: ['day'],
+        // A list of names of data record attributes that contain y-values.
+        ykeys: ['value'],
+        // Labels for the ykeys -- will be displayed when you hover over the
+        // chart.
+        labels: ['Attendance'],
+        fillOpacity: 0.7
+
+      });
     }, 500);
   });
 });
@@ -222,29 +253,29 @@ $(document).on("pagebeforeshow", "#reports_page", function ()
 //********************************************************************************************************************************************
 // only want to do this once (pagecreate) to maintain options
 //********************************************************************************************************************************************
-$(document).on("pagecreate", "#reports_page", function () 
+$(document).on('pagecreate', '#reports_page', function () 
 {
   // get all smallgroup IDs from database and populate selectmenu
   $.ajax(
   {
-    url: "pages/query.php",
-    type: "POST",
+    url: 'pages/query.php',
+    type: 'POST',
     data: {query: 11},
-    dataType: "json"
+    dataType: 'json'
   }).done(function( msg ) 
   {
     // console.log(msg);
-    smallgroup_ids.push('<option value="%" selected="selected">All</option>'); // initial "all" option
+    smallgroupIDs.push('<option value="%" selected="selected">All</option>'); // initial "all" option
 
     // iterate through data, populate selectmenu's options
     $.each(msg, function (index, value) 
     {
-      smallgroup_ids.push('<option value="'+value.sg_id+'">'+value.sg_name+'</option>');
+      smallgroupIDs.push('<option value="'+value.sgid+'">'+value.sgName+'</option>');
     });
 
     // populate w/ array r
-    $('#sgid_att').html(smallgroup_ids.join(""));
-    localStorage.setItem('smallgroup_ids', JSON.stringify(smallgroup_ids));
+    $('#sgid_att').html(smallgroupIDs.join(''));
+    localStorage.setItem('smallgroupIDs', JSON.stringify(smallgroupIDs));
 
     // refresh selectmenu widget
     // $('#sgid').selectmenu('refresh', true);
@@ -256,35 +287,35 @@ $(document).on("pagecreate", "#reports_page", function ()
 //********************************************************************************************************************************************
 // listen for clicks on student name and update user panel accordingly
 //********************************************************************************************************************************************
-$(document).on("click", "#users_lv li" ,function (event) 
+$(document).on('click', '#users_lv li' ,function () 
 {
-  selected_user = $(this).attr('uname');
-  selected_uid  = $(this).attr('uid');
-  $("#output_text").html('Hi ' + selected_user);
+  selectedUser = $(this).attr('uname');
+  selectedUid  = $(this).attr('uid');
+  $('#output_text').html('Hi ' + selectedUser);
 }); 
 
 //********************************************************************************************************************************************
 // listen for clicks on rightpanel
 //********************************************************************************************************************************************
-$(document).on("click", "#action_lv li" ,function (event) 
+$(document).on('click', '#action_lv li' ,function () 
 {
   // alert($(this).text());
 
   // clear filter and update user listview
-  $('#filter-for-listview').val("");
-  $('#filter-for-listview').trigger("keyup");
+  $('#filter-for-listview').val('');
+  $('#filter-for-listview').trigger('keyup');
 
   // close panel
-  $('#rightpanel').panel("close");
+  $('#rightpanel').panel('close');
 
-  if($(this).text() === "Check in")
+  if($(this).text() === 'Check in')
   {
     // checkin user
     $.ajax(
     {
-      url: "pages/query.php",
-      type: "POST",
-      data: {uid: selected_uid, query: 2},
+      url: 'pages/query.php',
+      type: 'POST',
+      data: {uid: selectedUid, query: 2},
     });
 
     // show popup
@@ -293,7 +324,7 @@ $(document).on("click", "#action_lv li" ,function (event)
       position: 'bottom-left',
       title : 'Success!',
       time : 2000,
-      text : 'Checked in ' + selected_user
+      text : 'Checked in ' + selectedUser
     });
   }
   else
@@ -304,7 +335,7 @@ $(document).on("click", "#action_lv li" ,function (event)
     //   position: 'bottom-left',
     //   title : 'Doh!',
     //   time : 2000,
-    //   text : 'Not implemented yet, ' + selected_user
+    //   text : 'Not implemented yet, ' + selectedUser
     // });         
   }
 });
@@ -312,26 +343,26 @@ $(document).on("click", "#action_lv li" ,function (event)
 //********************************************************************************************************************************************
 // generate content for user history page 
 //********************************************************************************************************************************************
-$(document).on("pagebeforeshow", "#user_history", function () 
+$(document).on('pagebeforeshow', '#user_history', function () 
 {
     // Show user's history
     $.ajax(
     {
-      url: "pages/query.php",
-      type: "POST",
-      data: {uid: selected_uid, query: 4},
+      url: 'pages/query.php',
+      type: 'POST',
+      data: {uid: selectedUid, query: 4},
     }).done(function( msg ) 
     {
-      var r = new Array();
+      var r = [];
 
-      r.push('<li data-role="list-divider">' + selected_user + ' - Attendance Records</li>');
+      r.push('<li data-role="list-divider">' + selectedUser + ' - Attendance Records</li>');
 
       $.each(msg, function (index, value) 
       {
-        r.push( "<li>" + value.days + "</li>");
+        r.push( '<li>' + value.days + '</li>');
       });
 
-      $('#user_attendance_lv').html(r.join('')).listview("refresh");
+      $('#user_attendance_lv').html(r.join('')).listview('refresh');
 
     });    
 });
@@ -339,123 +370,123 @@ $(document).on("pagebeforeshow", "#user_history", function ()
 //********************************************************************************************************************************************
 // generate content for attendance page 
 //********************************************************************************************************************************************
-function update_attendance_table()
+function updateAttendanceTable()
 {
   $.ajax(
   {
-    url: "pages/query.php",
-    type: "POST",
+    url: 'pages/query.php',
+    type: 'POST',
     data: { query         : 0,
-            sgid          : $("#sgid_att").val(),
-            gender_rep    : $("#gender_att").val(),
-            gradyear_rep  : $("#gradyear_att").val(),
+            sgid          : $('#sgid_att').val(),
+            genderRep     : $('#gender_att').val(),
+            gradyearRep   : $('#gradyear_att').val(),
           },
-    dataType: "json"
+    dataType: 'json'
   }).done(function( msg ) 
   {
     // alert(msg);
-    var r = new Array();
-    r.push( '<thead><tr><th>Date</th><th>Attendance</th></tr></thead>')
+    var r = [];
+    r.push( '<thead><tr><th>Date</th><th>Attendance</th></tr></thead>');
 
     $.each(msg, function (index, value) 
     {
       r.push( '<tr><td>' + value.days + '</td><td>' + value.attendees + '</tr>' );
     });
 
-    r.push( '</tbody>')
+    r.push( '</tbody>');
 
     // alert(r);
     $('#attendance_table')[0].innerHTML = r.join('');
   });
 }
 
-$(document).on("pagebeforeshow", "#attendance_page", function () 
+$(document).on('pagebeforeshow', '#attendance_page', function () 
 {
   // hack to preserve dynamically loaded selectmenu values - async problems?
-  $('#sgid_att').html(JSON.parse(localStorage.getItem("smallgroup_ids")).join(""));
+  $('#sgid_att').html(JSON.parse(localStorage.getItem('smallgroupIDs')).join(''));
 
   // update attendance table w/ values from options selectmenus
-  update_attendance_table();
+  updateAttendanceTable();
 });
 
 // listen for option changes
-$(document).on('change', '#daterange_att' , function() { update_attendance_table(); });
-$(document).on('change', '#sgid_att'      , function() { update_attendance_table(); });
-$(document).on('change', '#gender_att'    , function() { update_attendance_table(); });
-$(document).on('change', '#gradyear_att'  , function() { update_attendance_table(); });
+$(document).on('change', '#daterange_att' , function() { updateAttendanceTable(); });
+$(document).on('change', '#sgid_att'      , function() { updateAttendanceTable(); });
+$(document).on('change', '#gender_att'    , function() { updateAttendanceTable(); });
+$(document).on('change', '#gradyear_att'  , function() { updateAttendanceTable(); });
 
 
 //********************************************************************************************************************************************
 // generate content for stale users page 
 //********************************************************************************************************************************************
-function update_stale_users_table()
+function updateStaleUsersTable()
 {
   $.ajax(
   {
-    url: "pages/query.php",
-    type: "POST",
+    url: 'pages/query.php',
+    type: 'POST',
     data: { query         : 5,
-            daterange     : $("#daterange_stale").val(),
-            sgid          : $("#sgid_stale").val(),
-            gender_rep    : $("#gender_stale").val(),
-            gradyear_rep  : $("#gradyear_stale").val(),
+            daterange     : $('#daterange_stale').val(),
+            sgid          : $('#sgid_stale').val(),
+            genderRep     : $('#gender_stale').val(),
+            gradyearRep   : $('#gradyear_stale').val(),
           },
-    dataType: "json"
+    dataType: 'json'
   }).done(function( msg ) 
   {
     // console.log(msg);
-    var r = new Array();
-    r.push( '<thead><tr><th>User</th><th>Last Checkin</th></tr></thead>')
+    var r = [];
+    r.push( '<thead><tr><th>User</th><th>Last Checkin</th></tr></thead>');
 
     $.each(msg, function (index, value) 
     {
       r.push( '<tr><td>' + value.firstname + ' ' + value.lastname + '</td><td>' + value.day + '</tr>' );
     });
 
-    r.push( '</tbody>')
+    r.push( '</tbody>');
 
     $('#stale_users_table')[0].innerHTML = r.join('');
   });  
 
 }
 
-$(document).on("pagebeforeshow", "#stale_users_page", function () 
+$(document).on('pagebeforeshow', '#stale_users_page', function () 
 {
   // hack to preserve dynamically loaded selectmenu values - async problems?
-  $('#sgid_stale').html(JSON.parse(localStorage.getItem("smallgroup_ids")).join(""));
+  $('#sgid_stale').html(JSON.parse(localStorage.getItem('smallgroupIDs')).join(''));
 
-  update_stale_users_table();
+  updateStaleUsersTable();
 });
 
-$(document).on('change', '#daterange_stale' , function() { update_stale_users_table(); });
-$(document).on('change', '#sgid_stale'      , function() { update_stale_users_table(); });
-$(document).on('change', '#gender_stale'    , function() { update_stale_users_table(); });
-$(document).on('change', '#gradyear_stale'  , function() { update_stale_users_table(); });
+$(document).on('change', '#daterange_stale' , function() { updateStaleUsersTable(); });
+$(document).on('change', '#sgid_stale'      , function() { updateStaleUsersTable(); });
+$(document).on('change', '#gender_stale'    , function() { updateStaleUsersTable(); });
+$(document).on('change', '#gradyear_stale'  , function() { updateStaleUsersTable(); });
 
 //********************************************************************************************************************************************
 // generate content for checkins page 
 //********************************************************************************************************************************************
-function update_checkins_table()
+function updateCheckinsTable()
 {
   // get attendance per day and create collapsible
   $.ajax(
   {
-    url: "pages/query.php",
-    type: "POST",
+    url: 'pages/query.php',
+    type: 'POST',
     data: { query         : 1,
-            sgid          : $("#sgid_ci").val(),
-            gender_rep    : $("#gender_ci").val(),
-            gradyear_rep  : $("#gradyear_ci").val(),
+            sgid          : $('#sgid_ci').val(),
+            genderRep     : $('#gender_ci').val(),
+            gradyearRep   : $('#gradyear_ci').val(),
           },
-    dataType: "json"
+    dataType: 'json'
   }).done(function( msg ) 
   {
     // console.log(msg);
-    var r = new Array();
-    var date = "";
+    var r = [];
+    var date = '';
     $.each(msg, function (index, value) 
     {
-      if(date==value.days)
+      if(date===value.days)
       {
         // still on same date - push username
         r.push( '<li>' + value.firstname + ' ' + value.lastname + '</li>');
@@ -476,47 +507,47 @@ function update_checkins_table()
     });
     r.push( '</ul></li>');
 
-    $('#lv_attendance').html(r.join('')).listview("refresh");
+    $('#lv_attendance').html(r.join('')).listview('refresh');
     $('#lv_attendance').collapsibleset().trigger('create');
   });
 }
 
-$(document).on("pagebeforeshow", "#checkins_page", function () 
+$(document).on('pagebeforeshow', '#checkins_page', function () 
 {
   // hack to preserve dynamically loaded selectmenu values - async problems?
-  $('#sgid_ci').html(JSON.parse(localStorage.getItem("smallgroup_ids")).join(""));
+  $('#sgid_ci').html(JSON.parse(localStorage.getItem('smallgroupIDs')).join(''));
 
-  update_checkins_table();
+  updateCheckinsTable();
 });
 
-$(document).on('change', '#daterange_ci' , function() { update_checkins_table(); });
-$(document).on('change', '#sgid_ci'      , function() { update_checkins_table(); });
-$(document).on('change', '#gender_ci'    , function() { update_checkins_table(); });
-$(document).on('change', '#gradyear_ci'  , function() { update_checkins_table(); });
+$(document).on('change', '#daterange_ci' , function() { updateCheckinsTable(); });
+$(document).on('change', '#sgid_ci'      , function() { updateCheckinsTable(); });
+$(document).on('change', '#gender_ci'    , function() { updateCheckinsTable(); });
+$(document).on('change', '#gradyear_ci'  , function() { updateCheckinsTable(); });
 
 //********************************************************************************************************************************************
 // generate content for all user history page 
 //********************************************************************************************************************************************
-function update_user_history_table()
+function updateUserHistoryTable()
 {
   $.ajax(
   {
-    url: "pages/query.php",
-    type: "POST",
+    url: 'pages/query.php',
+    type: 'POST',
     data: { query         : 6,
-            sgid          : $("#sgid_uh").val(),
-            gender_rep    : $("#gender_uh").val(),
-            gradyear_rep  : $("#gradyear_uh").val(),
+            sgid          : $('#sgid_uh').val(),
+            genderRep     : $('#gender_uh').val(),
+            gradyearRep   : $('#gradyear_uh').val(),
           },
-    dataType: "json"
+    dataType: 'json'
   }).done(function( msg ) 
   {
-    var r = new Array();
-    var user = "";
+    var r = [];
+    var user = '';
 
     $.each(msg, function (index, value) 
     {
-      if(user==(value.firstname + ' ' + value.lastname))
+      if(user===(value.firstname + ' ' + value.lastname))
       {
         // same user, continue adding dates
         r.push('<li>' + value.days + '</li>');
@@ -530,44 +561,44 @@ function update_user_history_table()
       }
     });
 
-    $('#all_user_attendance_lv').html(r.join('')).listview("refresh");
+    $('#all_user_attendance_lv').html(r.join('')).listview('refresh');
 
   });    
 }
 
-$(document).on("pagebeforeshow", "#all_user_history", function () 
+$(document).on('pagebeforeshow', '#all_user_history', function () 
 {
   // hack to preserve dynamically loaded selectmenu values - async problems?
-  $('#sgid_uh').html(JSON.parse(localStorage.getItem("smallgroup_ids")).join(""));
+  $('#sgid_uh').html(JSON.parse(localStorage.getItem('smallgroupIDs')).join(''));
 
-  update_user_history_table();
+  updateUserHistoryTable();
 });
 
-$(document).on('change', '#daterange_uh' , function() { update_user_history_table(); });
-$(document).on('change', '#sgid_uh'      , function() { update_user_history_table(); });
-$(document).on('change', '#gender_uh'    , function() { update_user_history_table(); });
-$(document).on('change', '#gradyear_uh'  , function() { update_user_history_table(); });
+$(document).on('change', '#daterange_uh' , function() { updateUserHistoryTable(); });
+$(document).on('change', '#sgid_uh'      , function() { updateUserHistoryTable(); });
+$(document).on('change', '#gender_uh'    , function() { updateUserHistoryTable(); });
+$(document).on('change', '#gradyear_uh'  , function() { updateUserHistoryTable(); });
 
 //********************************************************************************************************************************************
 // generate content for user info page 
 //********************************************************************************************************************************************
-function update_user_info_table()
+function updateUserInfoTable()
 {
   $.ajax(
   {
-    url: "pages/query.php",
-    type: "POST",
+    url: 'pages/query.php',
+    type: 'POST',
     data: { query         : 9,
-            sgid          : $("#sgid_ui").val(),
-            gender_rep    : $("#gender_ui").val(),
-            gradyear_rep  : $("#gradyear_ui").val(),
+            sgid          : $('#sgid_ui').val(),
+            genderRep     : $('#gender_ui').val(),
+            gradyearRep   : $('#gradyear_ui').val(),
           },
-    dataType: "json"
+    dataType: 'json'
   }).done(function( msg ) 
   {
     // console.log(msg);
-    var r = new Array();
-    r.push( '<thead><tr><th>User</th><th>Email</th><th>Gender</th><th>Birthday</th><th>Grad Year</th><th>School Year</th><th>Phone</th><th>Small Group</th></tr></thead>')
+    var r = [];
+    r.push( '<thead><tr><th>User</th><th>Email</th><th>Gender</th><th>Birthday</th><th>Grad Year</th><th>School Year</th><th>Phone</th><th>Small Group</th></tr></thead>');
 
     $.each(msg, function (index, value) 
     {
@@ -575,10 +606,10 @@ function update_user_info_table()
                   '<td>' + value.email + '</td>' +
                   '<td>' + value.gender + '</td>' +
                   '<td>' + value.birthday + '</td>' +
-                  '<td>' + value.grad_year + '</td>' +
-                  '<td>' + value.school_year + '</td>' +
+                  '<td>' + value.gradYear + '</td>' +
+                  '<td>' + value.schoolYear + '</td>' +
                   '<td>' + value.cellphone + '</td>' +
-                  '<td>' + value.sg_name + '</td>' +
+                  '<td>' + value.sgName + '</td>' +
               '</tr>' );
     });
 
@@ -586,32 +617,32 @@ function update_user_info_table()
   });    
 }
 
-$(document).on("pagebeforeshow", "#user_info_page", function () 
+$(document).on('pagebeforeshow', '#user_info_page', function () 
 {
   // hack to preserve dynamically loaded selectmenu values - async problems?
-  $('#sgid_ui').html(JSON.parse(localStorage.getItem("smallgroup_ids")).join(""));
+  $('#sgid_ui').html(JSON.parse(localStorage.getItem('smallgroupIDs')).join(''));
 
-  update_user_info_table();
+  updateUserInfoTable();
 });
 
-$(document).on('change', '#daterange_ui' , function() { update_user_info_table(); });
-$(document).on('change', '#sgid_ui'      , function() { update_user_info_table(); });
-$(document).on('change', '#gender_ui'    , function() { update_user_info_table(); });
-$(document).on('change', '#gradyear_ui'  , function() { update_user_info_table(); });
+$(document).on('change', '#daterange_ui' , function() { updateUserInfoTable(); });
+$(document).on('change', '#sgid_ui'      , function() { updateUserInfoTable(); });
+$(document).on('change', '#gender_ui'    , function() { updateUserInfoTable(); });
+$(document).on('change', '#gradyear_ui'  , function() { updateUserInfoTable(); });
 
 //********************************************************************************************************************************************
 // handle login form  
 //********************************************************************************************************************************************
 $(document).ready(function() 
 {
-  $("#submit").click(function()
+  $('#submit').click(function()
   {
-    var formData = $("#login_form").serialize();
+    var formData = $('#login_form').serialize();
 
     $.ajax(
     {
-        type: "POST",
-        url: "pages/login.php",
+        type: 'POST',
+        url: 'pages/login.php',
         cache: false,
         data: formData,
     });

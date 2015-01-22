@@ -38,17 +38,17 @@ $gender       = isset($_REQUEST['gender'])        ? $_REQUEST['gender']         
 $cell         = isset($_REQUEST['cell'])          ? $_REQUEST['cell']                     : "";
 $homeph       = isset($_REQUEST['homeph'])        ? $_REQUEST['homeph']                   : "";
 $email        = isset($_REQUEST['email'])         ? $_REQUEST['email']                    : "";
-$addr_street  = isset($_REQUEST['addr_street'])   ? $_REQUEST['addr_street']              : "";
-$addr_city    = isset($_REQUEST['addr_city'])     ? $_REQUEST['addr_city']                : "";
-$addr_state   = isset($_REQUEST['addr_state'])    ? $_REQUEST['addr_state']               : "";
-$addr_zip     = isset($_REQUEST['addr_zip'])      ? $_REQUEST['addr_zip']                 : "";
+$addr_street  = isset($_REQUEST['addrStreet'])    ? $_REQUEST['addrStreet']               : "";
+$addr_city    = isset($_REQUEST['addrCity'])      ? $_REQUEST['addrCity']                 : "";
+$addr_state   = isset($_REQUEST['addrState'])     ? $_REQUEST['addrState']                : "";
+$addr_zip     = isset($_REQUEST['addrZip'])       ? $_REQUEST['addrZip']                  : "";
 $gradyear     = isset($_REQUEST['gradyear'])      ? get_gradyear($_REQUEST['gradyear'])  : "0000";
 
 // report options
 $daterange    = isset($_REQUEST['daterange'])     ? $_REQUEST['daterange']                : "0";
 $sgid         = isset($_REQUEST['sgid'])          ? $_REQUEST['sgid']                     : "%";
-$gender_rep   = isset($_REQUEST['gender_rep'])    ? $_REQUEST['gender_rep']               : "%";
-$gradyear_rep = isset($_REQUEST['gradyear_rep'])  ? $_REQUEST['gradyear_rep']             : "%";
+$gender_rep   = isset($_REQUEST['genderRep'])     ? $_REQUEST['genderRep']                : "%";
+$gradyear_rep = isset($_REQUEST['gradyearRep'])   ? $_REQUEST['gradyearRep']              : "%";
 
 
 
@@ -140,7 +140,7 @@ if(isset($_REQUEST['query']))
   // FROM students JOIN attendance
   // ON students.uid = attendance.uid
   // GROUP BY DATE(attendance.date)",
-  "SELECT DATE_FORMAT( DATE( attendance.date ) ,  '%Y/%c/%d' ) as date,
+  "SELECT DATE_FORMAT( DATE( attendance.date ) ,  '%Y-%c-%d' ) as date,
   COUNT(DISTINCT students.firstname, students.lastname) as attendees
   FROM students JOIN attendance
   ON students.uid = attendance.uid
@@ -155,15 +155,15 @@ if(isset($_REQUEST['query']))
   ORDER BY firstname, lastname",
   
   // 9 - show user information
-  "SELECT students.firstname, students.lastname, students.gender, students.birthday, students.grad_year,
-  students.cellphone, students.email, small_groups.sg_name,
+  "SELECT students.firstname, students.lastname, students.gender, students.birthday, students.grad_year as gradYear,
+  students.cellphone, students.email, small_groups.sg_name as sgName,
     CASE
       WHEN students.grad_year = CURDATE() - INTERVAL 5 MONTH + INTERVAL 4 YEAR THEN 'Freshman'
       WHEN students.grad_year = CURDATE() - INTERVAL 5 MONTH + INTERVAL 3 YEAR THEN 'Sophomore'
       WHEN students.grad_year = CURDATE() - INTERVAL 5 MONTH + INTERVAL 2 YEAR THEN 'Junior'
       WHEN students.grad_year = CURDATE() - INTERVAL 5 MONTH + INTERVAL 1 YEAR THEN 'Senior'
       ELSE 'unknown'
-    END AS school_year
+    END AS schoolYear
   FROM students JOIN small_groups
   ON (students.small_group_id = small_groups.sg_id)
   WHERE 
@@ -180,7 +180,7 @@ if(isset($_REQUEST['query']))
   INSERT INTO attendance(uid) VALUES (LAST_INSERT_ID())",
   
   // 11 - get smallgroup IDs
-  "SELECT  `sg_id` ,  `sg_name` ,  `sg_leader_uid` 
+  "SELECT  `sg_id` as sgid ,  `sg_name` as sgName,  `sg_leader_uid` 
   FROM  `small_groups`
   ORDER BY small_groups.sg_name",
   
