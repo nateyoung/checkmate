@@ -68,49 +68,68 @@ $(document).ready(function()
   });
 
   // handle visitor registration form
+  $('.validate-form').submit(function (e) {
+    if (!this.checkValidity()) 
+    {
+      // Prevent default stops form from firing
+      e.preventDefault();
+      $(this).addClass('invalid');
+      $('#status').html('invalid');
+    } 
+    else 
+    {
+      $(this).removeClass('invalid');
+      $('#status').html('submitted');
+    }
+  });
+
   $('#visitor_form').submit(function(e) {
+
     e.preventDefault();
     e.stopImmediatePropagation(); // stop double-submitted forms
     
-    $('#popupLogin').popup('close');
-
-    $.ajax(
+    if(this.checkValidity())
     {
-      url: 'pages/query.php',
-      type: 'POST',
-      cache: false,
-      data: { query       : 10,
-              fn          : $('#fn').val(),
-              mn          : $('#mn').val(),
-              ln          : $('#ln').val(),
-              bday        : $('#bday').val(),
-              gender      : $('#gender_select').val(),
-              cell        : $('#cphone').val(),
-              homeph      : $('#homeph').val(),
-              email       : $('#email').val(),
-              addrStreet  : $('#addrStreet').val(),
-              addrCity    : $('#addrCity').val(),
-              addrState   : $('#addrState').val(),
-              addrZip     : $('#addrZip').val(),
-              gradyear    : $('#gradeSelect').val() 
-              },
-    }).done(function()
-    {
-      // show popup
-      $.gritter.add(
+      $('#popupLogin').popup('close');
+  
+      $.ajax(
       {
-        position: 'bottom-left',
-        title : 'Welcome!',
-        time : 2000,
-        text : 'Registered and checked in ' + $('#fn').val() + ' ' + $('#ln').val()
+        url: 'pages/query.php',
+        type: 'POST',
+        cache: false,
+        data: { query       : 10,
+                fn          : $('#fn').val(),
+                mn          : $('#mn').val(),
+                ln          : $('#ln').val(),
+                bday        : $('#bday').val(),
+                gender      : $('#gender_select').val(),
+                cell        : $('#cphone').val(),
+                homeph      : $('#homeph').val(),
+                email       : $('#email').val(),
+                addrStreet  : $('#addrStreet').val(),
+                addrCity    : $('#addrCity').val(),
+                addrState   : $('#addrState').val(),
+                addrZip     : $('#addrZip').val(),
+                gradyear    : $('#gradeSelect').val() 
+                },
+      }).done(function()
+      {
+        // show popup
+        $.gritter.add(
+        {
+          position: 'bottom-left',
+          title : 'Welcome!',
+          time : 2000,
+          text : 'Registered and checked in ' + $('#fn').val() + ' ' + $('#ln').val()
+        });
+  
+        // reset form after gritter done (500ms)
+        setTimeout( function (){
+          $('#visitor_form').trigger('reset');
+        }, 500);
+  
       });
-
-      // reset form after gritter done (500ms)
-      setTimeout( function (){
-        $('#visitor_form').trigger('reset');
-      }, 500);
-
-    });
+    }
   });
 /*
 $('#visitor_form').validate({
@@ -287,7 +306,6 @@ $(document).on('pagebeforeshow', '#reports_page', function ()
            // showRangeSelector: true,
          });
 */
-
       new Morris.Area({
         // ID of the element in which to draw the chart.
         element: 'total_att_chart',
