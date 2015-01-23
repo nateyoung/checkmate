@@ -112,6 +112,20 @@ $(document).ready(function()
 
     });
   });
+/*
+$('#visitor_form').validate({
+  messages: {
+    firstname: "First name is required.",
+    lastname:  "Last name is required.",
+    email:  "Email is required."
+    //email: {
+    //  required: "Email is required."
+    //  email: "You must provide a valid email address."
+    //}
+  },
+  focusInvalid: false
+});
+*/
 });
 
 
@@ -189,7 +203,8 @@ $(document).on('pagebeforeshow', '#reports_page', function ()
   {
     url: 'pages/query.php',
     type: 'POST',
-    data: {query: 7},
+    // data: {query: 7},
+    data: {query: 14},
     dataType: 'json'
   }).done(function( msg ) 
   {
@@ -197,38 +212,81 @@ $(document).on('pagebeforeshow', '#reports_page', function ()
 
     // parse through returned data, populate array of dates+attendance
     var r = [];
+    var date = '';
+    var str = '';
+    var gradYears = [];
+    var total = 0;
+
     $.each(msg, function (index, value) 
     {
+      // keep up w/ all possible gradYear values
+      if(jQuery.inArray(value.gradYear,gradYears)===-1)
+      {
+         gradYears.push(value.gradYear);
+      }
       // r.push( [new Date(value.date),value.attendees]);
-      r.push( {day:value.date, value:value.attendees});
-    });
+      if(date===value.date)
+      {
+        // still on same day - keep appending data
+        // console.log('same day: '+value.date);
+        str += ', "'+value.gradYear+'":"'+value.attendees+'"';
+        total = total + parseInt(value.attendees);
+        //console.log('updated total:'+total);
+      }
+      else
+      {
+        // new day - begin new string
+        date = value.date;
+        // console.log('new day: '+value.date);
+        
+        // if str has anything in it, push it to r
+        if(str.length)
+        {
+          // console.log('pushing: '+str+'}');
+          //r.push(JSON.parse(str+',"Total":"'+total+'"}'));
+          r.push(JSON.parse(str+'}'));
+        }
+        total = parseInt(value.attendees);
+        //console.log('new total: '+total);
 
-    // console.log(r);
+        str = '{"day":"'+value.date+'", "'+value.gradYear+'":"'+value.attendees+'"';
+      }
+      // r.push( {day:value.date, value:value.attendees});
+    });
+    // r.push( {day:value.date, value:value.attendees});
+
+    // push last str
+    r.push(JSON.parse(str+'}'));
+    //console.log(r);
+    //console.log(gradYears);
 
     // clear chart so multiples aren't created
     $('#total_att_chart').empty();
 
     // generate chart after 500ms
     setTimeout( function (){
-      // new Dygraph(document.getElementById("total_att_chart"),
-      //   // For possible data formats, see http://dygraphs.com/data.html
-      //   // The x-values could also be dates, e.g. "2012/03/15"
-      //   r, // data from database
-      //   {
-      //     // options go here. See http://dygraphs.com/options.html
-      //     // legend: 'always',
-      //     animatedZooms: true,
-      //     xlabel: 'Date',
-      //     ylabel: 'Attendance',
-      //     labels: ["date","attendance"],
-      //     title: 'Attendance over time',
-      //     fillGraph: true,
-      //     rightGap: 20,
-      //     drawPoints: true,
-      //     pointSize : 3,
-      //     highlightCircleSize: 5,
-      //     // showRangeSelector: true,
-      //   });
+/*
+      new Dygraph(document.getElementById("total_att_chart"),
+         // For possible data formats, see http://dygraphs.com/data.html
+         // The x-values could also be dates, e.g. "2012/03/15"
+         r, // data from database
+         {
+           // options go here. See http://dygraphs.com/options.html
+           // legend: 'always',
+           animatedZooms: true,
+           xlabel: 'day',
+           //ylabel: 'Attendance',
+           ylabel: ['fresh','soph','jun','sen','unk'],
+           //labels: ["date","attendance"],
+           title: 'Attendance over time',
+           fillGraph: true,
+           rightGap: 20,
+           drawPoints: true,
+           pointSize : 3,
+           highlightCircleSize: 5,
+           // showRangeSelector: true,
+         });
+*/
 
       new Morris.Area({
         // ID of the element in which to draw the chart.
@@ -239,12 +297,22 @@ $(document).on('pagebeforeshow', '#reports_page', function ()
         // The name of the data record attribute that contains x-values.
         xkey: ['day'],
         // A list of names of data record attributes that contain y-values.
-        ykeys: ['value'],
+        // ykeys: gradYears,
+        ykeys: ['Freshman','Sophomore','Junior','Senior','unknown'],
         // Labels for the ykeys -- will be displayed when you hover over the
         // chart.
-        labels: ['Attendance'],
-        fillOpacity: 0.7
+        labels: ['Freshman','Sophomore','Junior','Senior','unknown'],
 
+        lineColors: ['#022245','#0D3D70','#22558C','#36689E','#5081B5'],
+        //fillOpacity: 0.7
+        /*
+        hoverCallback: function (index, options, content) {
+          console.log(content);
+          return content;
+          //var row = options.data[index];
+          //return '<div class="hover-title">' + options.dateFormat(row.y) + '</div><b style="color: ' + options.lineColors[0] + '">' + row.x.toLocaleString() + " </b><span>" + options.labels[0] + "</span>";
+        }
+        */
       });
     }, 500);
   });

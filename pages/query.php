@@ -200,6 +200,19 @@ if(isset($_REQUEST['query']))
   WHERE (firstname LIKE '$fn%') AND (lastname LIKE '$ln%')
   ORDER BY firstname, lastname",
   
+  // 14 - get attendance broken out by gradyear
+  "SELECT DATE_FORMAT( DATE( attendance.date ) ,  '%Y-%c-%d' ) AS date, 
+    CASE
+      WHEN students.grad_year = CURDATE() - INTERVAL 5 MONTH + INTERVAL 4 YEAR THEN 'Freshman'
+      WHEN students.grad_year = CURDATE() - INTERVAL 5 MONTH + INTERVAL 3 YEAR THEN 'Sophomore'
+      WHEN students.grad_year = CURDATE() - INTERVAL 5 MONTH + INTERVAL 2 YEAR THEN 'Junior'
+      WHEN students.grad_year = CURDATE() - INTERVAL 5 MONTH + INTERVAL 1 YEAR THEN 'Senior'
+      ELSE 'unknown'
+    END AS gradYear, COUNT( DISTINCT attendance.uid ) AS attendees
+  FROM attendance
+  JOIN students ON students.uid = attendance.uid
+  GROUP BY DATE( attendance.date ) , gradYear
+  ORDER BY date,students.grad_year",
   
   );
     
