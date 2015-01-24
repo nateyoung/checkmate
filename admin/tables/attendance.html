@@ -41,7 +41,8 @@
 			}
 
 			function updateCellValue(editableGrid, rowIndex, columnIndex, oldValue, newValue, row, onResponse)
-			{      
+			{ 
+				/* nothing yet    
 				$.ajax({
 					url: 'pages/update.php',
 					type: 'POST',
@@ -63,17 +64,18 @@
 					error: function(XMLHttpRequest, textStatus, exception) { alert("Ajax failure\n" + errortext); },
 					async: true
 				});
+				*/
 			   
 			}
 
 			window.onload = function() {
-				editableGrid = new EditableGrid("students"); 
+				editableGrid = new EditableGrid("attendance"); 
 				editableGrid.tableLoaded  = function() { this.renderGrid("tablecontent", "testgrid"); };
 				editableGrid.modelChanged = function(rowIndex, columnIndex, oldValue, newValue, row) {
    	    	updateCellValue(this, rowIndex, columnIndex, oldValue, newValue, row);
    	    };
 
-				editableGrid.loadJSON("pages/getdata.php");
+				editableGrid.loadJSON("pages/getAttendance.php");
 			}
 
 		</script>
@@ -81,7 +83,7 @@
 	</head>
 	
 	<body>
-		<h1>Student Info</h1> 
+		<h1>Attendance - (will be able to create/delete entries soon...)</h1> 
 		<!-- Feedback message zone -->
 			<div id="message"></div>
 
